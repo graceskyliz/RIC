@@ -216,14 +216,53 @@
             <div class="row g-3">
                 {% for analysis in recent_analyses %}
                 <div class="col-md-6 col-lg-4">
-                    <div class="card h-100">
+                    <div class="card h-100 analysis-card">
                         <div class="card-body">
-                            <h6 class="card-title">{{ analysis.original_filename }}</h6>
-                            <p class="card-text text-muted small">
+                            <!-- Subject Badge -->
+                            {% if analysis.subject %}
+                            <div class="subject-badge mb-2">
+                                <span class="badge bg-subject-{{ analysis.subject|replace(' ', '_')|replace('/', '_')|lower }}">
+                                    <i data-feather="book" class="me-1"></i>
+                                    {{ analysis.subject }}
+                                </span>
+                                {% if analysis.grade_level %}
+                                <span class="badge bg-grade ms-1">
+                                    {{ analysis.grade_level }}
+                                </span>
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                            
+                            <!-- Lesson Topic -->
+                            {% if analysis.lesson_topic %}
+                            <h6 class="card-title lesson-topic">{{ analysis.lesson_topic }}</h6>
+                            {% else %}
+                            <h6 class="card-title">{{ analysis.original_filename[:30] }}{% if analysis.original_filename|length > 30 %}...{% endif %}</h6>
+                            {% endif %}
+                            
+                            <p class="card-text text-soft small mb-3">
+                                <i data-feather="calendar" class="me-1"></i>
                                 {{ analysis.upload_timestamp.strftime('%d/%m/%Y %H:%M') }}
                             </p>
+                            
+                            <!-- Score if completed -->
+                            {% if analysis.status == 'completed' and analysis.ric_feedback %}
+                                {% set feedback = analysis.get_ric_feedback() %}
+                                {% if feedback and feedback.overall_score %}
+                                <div class="score-preview mb-3">
+                                    <div class="d-flex align-items-center">
+                                        <div class="progress flex-grow-1 me-2" style="height: 6px;">
+                                            <div class="progress-bar score-bar" 
+                                                 style="width: {{ feedback.overall_score }}%; background: {{ 'linear-gradient(90deg, #10b981, #059669)' if feedback.overall_score >= 80 else 'linear-gradient(90deg, #f59e0b, #d97706)' if feedback.overall_score >= 60 else 'linear-gradient(90deg, #ef4444, #dc2626)' }}"></div>
+                                        </div>
+                                        <small class="fw-bold score-text">{{ feedback.overall_score }}/100</small>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            {% endif %}
+                            
                             <div class="d-flex align-items-center justify-content-between">
-                                <span class="badge bg-{% if analysis.status == 'completed' %}success{% elif analysis.status == 'error' %}danger{% else %}warning{% endif %}">
+                                <span class="badge status-badge-{% if analysis.status == 'completed' %}success{% elif analysis.status == 'error' %}danger{% else %}warning{% endif %}">
                                     {% if analysis.status == 'completed' %}
                                         <i data-feather="check-circle" class="me-1"></i>
                                         Completado
@@ -235,8 +274,9 @@
                                         Procesando
                                     {% endif %}
                                 </span>
-                                <a href="{{ url_for('analyze', analysis_id=analysis.id) }}" class="btn btn-outline-primary btn-sm">
-                                    Ver
+                                <a href="{{ url_for('analyze', analysis_id=analysis.id) }}" class="btn btn-soft-primary btn-sm">
+                                    <i data-feather="eye" class="me-1"></i>
+                                    Ver Análisis
                                 </a>
                             </div>
                         </div>

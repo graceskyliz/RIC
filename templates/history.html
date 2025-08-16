@@ -100,11 +100,29 @@
                                     <tr>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <i data-feather="file-audio" class="me-2 text-muted"></i>
+                                                <i data-feather="file-audio" class="me-2 text-soft"></i>
                                                 <div>
-                                                    <div class="fw-medium">{{ analysis.original_filename }}</div>
+                                                    {% if analysis.subject %}
+                                                    <div class="subject-info mb-1">
+                                                        <span class="badge bg-subject-{{ analysis.subject|replace(' ', '_')|replace('/', '_')|lower }} me-1" style="font-size: 0.7rem;">
+                                                            {{ analysis.subject }}
+                                                        </span>
+                                                        {% if analysis.grade_level %}
+                                                        <span class="badge bg-grade" style="font-size: 0.7rem;">
+                                                            {{ analysis.grade_level }}
+                                                        </span>
+                                                        {% endif %}
+                                                    </div>
+                                                    {% endif %}
+                                                    <div class="fw-medium lesson-title">
+                                                        {% if analysis.lesson_topic %}
+                                                            {{ analysis.lesson_topic }}
+                                                        {% else %}
+                                                            {{ analysis.original_filename[:40] }}{% if analysis.original_filename|length > 40 %}...{% endif %}
+                                                        {% endif %}
+                                                    </div>
                                                     {% if analysis.analysis_timestamp %}
-                                                        <small class="text-muted">
+                                                        <small class="text-soft">
                                                             Analizado: {{ analysis.analysis_timestamp.strftime('%d/%m/%Y %H:%M') }}
                                                         </small>
                                                     {% endif %}
@@ -112,14 +130,14 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <span class="text-muted">
+                                            <span class="text-secondary">
                                                 {{ analysis.upload_timestamp.strftime('%d/%m/%Y') }}
                                                 <br>
-                                                <small>{{ analysis.upload_timestamp.strftime('%H:%M') }}</small>
+                                                <small class="text-soft">{{ analysis.upload_timestamp.strftime('%H:%M') }}</small>
                                             </span>
                                         </td>
                                         <td>
-                                            <span class="badge bg-{% if analysis.status == 'completed' %}success{% elif analysis.status == 'error' %}danger{% elif analysis.status == 'processing' %}warning{% else %}secondary{% endif %}">
+                                            <span class="badge status-badge-{% if analysis.status == 'completed' %}success{% elif analysis.status == 'error' %}danger{% elif analysis.status == 'processing' %}warning{% else %}secondary{% endif %}">
                                                 {% if analysis.status == 'completed' %}
                                                     <i data-feather="check-circle" class="me-1"></i>
                                                     Completado
@@ -140,29 +158,29 @@
                                                 {% set feedback = analysis.get_ric_feedback() %}
                                                 {% if feedback and feedback.overall_score %}
                                                     <div class="d-flex align-items-center">
-                                                        <div class="progress me-2" style="width: 60px; height: 8px;">
+                                                        <div class="progress me-2" style="width: 60px; height: 8px; border-radius: 4px;">
                                                             <div class="progress-bar" 
-                                                                 style="width: {{ feedback.overall_score }}%; background-color: {{ 'var(--success-color)' if feedback.overall_score >= 80 else 'var(--warning-color)' if feedback.overall_score >= 60 else 'var(--danger-color)' }}">
+                                                                 style="width: {{ feedback.overall_score }}%; background: {{ 'linear-gradient(90deg, #10b981, #059669)' if feedback.overall_score >= 80 else 'linear-gradient(90deg, #f59e0b, #d97706)' if feedback.overall_score >= 60 else 'linear-gradient(90deg, #ef4444, #dc2626)' }}; border-radius: 4px;">
                                                             </div>
                                                         </div>
-                                                        <span class="fw-medium">{{ feedback.overall_score }}/100</span>
+                                                        <span class="fw-medium score-text">{{ feedback.overall_score }}/100</span>
                                                     </div>
                                                 {% else %}
-                                                    <span class="text-muted">-</span>
+                                                    <span class="text-soft">-</span>
                                                 {% endif %}
                                             {% else %}
-                                                <span class="text-muted">-</span>
+                                                <span class="text-soft">-</span>
                                             {% endif %}
                                         </td>
                                         <td>
                                             <div class="btn-group" role="group">
                                                 <a href="{{ url_for('analyze', analysis_id=analysis.id) }}" 
-                                                   class="btn btn-outline-primary btn-sm">
+                                                   class="btn btn-soft-primary btn-sm">
                                                     <i data-feather="eye" class="me-1"></i>
                                                     Ver
                                                 </a>
                                                 {% if analysis.status == 'completed' %}
-                                                    <button class="btn btn-outline-secondary btn-sm" 
+                                                    <button class="btn btn-soft-primary btn-sm" 
                                                             onclick="exportAnalysis({{ analysis.id }})"
                                                             title="Exportar resultados">
                                                         <i data-feather="download"></i>

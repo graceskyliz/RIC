@@ -16,21 +16,47 @@
             
             <div class="d-flex align-items-center justify-content-between">
                 <div>
+                    <!-- Subject and Educational Context -->
+                    {% if analysis.subject or analysis.grade_level or analysis.lesson_topic %}
+                    <div class="educational-context-header mb-3">
+                        <div class="d-flex flex-wrap gap-2 mb-2">
+                            {% if analysis.subject %}
+                            <span class="badge bg-subject-{{ analysis.subject|replace(' ', '_')|replace('/', '_')|lower }} fs-6">
+                                <i data-feather="book" class="me-1"></i>
+                                {{ analysis.subject }}
+                            </span>
+                            {% endif %}
+                            {% if analysis.grade_level %}
+                            <span class="badge bg-grade fs-6">
+                                <i data-feather="users" class="me-1"></i>
+                                {{ analysis.grade_level }}
+                            </span>
+                            {% endif %}
+                        </div>
+                        {% if analysis.lesson_topic %}
+                        <h1 class="h2 mb-1 lesson-topic">{{ analysis.lesson_topic }}</h1>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    
+                    {% if not analysis.lesson_topic %}
                     <h1 class="h3 mb-1">{{ analysis.original_filename }}</h1>
-                    <p class="text-muted mb-1">
+                    {% endif %}
+                    
+                    <p class="text-soft mb-1">
                         <i data-feather="calendar" class="me-1"></i>
                         Subido el {{ analysis.upload_timestamp.strftime('%d/%m/%Y a las %H:%M') }}
                     </p>
-                    {% if analysis.subject or analysis.grade_level or analysis.lesson_topic %}
-                    <div class="educational-context-summary">
-                        {% if analysis.subject %}<span class="badge bg-secondary me-1">{{ analysis.subject }}</span>{% endif %}
-                        {% if analysis.grade_level %}<span class="badge bg-info me-1">{{ analysis.grade_level }}</span>{% endif %}
-                        {% if analysis.lesson_topic %}<span class="badge bg-light text-dark me-1">{{ analysis.lesson_topic }}</span>{% endif %}
-                    </div>
+                    
+                    {% if analysis.additional_context %}
+                    <p class="text-secondary small mb-2">
+                        <i data-feather="info" class="me-1"></i>
+                        {{ analysis.additional_context }}
+                    </p>
                     {% endif %}
                 </div>
                 <div class="status-badge">
-                    <span class="badge bg-{% if analysis.status == 'completed' %}success{% elif analysis.status == 'error' %}danger{% elif analysis.status == 'processing' %}warning{% else %}secondary{% endif %} fs-6">
+                    <span class="badge status-badge-{% if analysis.status == 'completed' %}success{% elif analysis.status == 'error' %}danger{% elif analysis.status == 'processing' %}warning{% else %}secondary{% endif %} fs-6">
                         {% if analysis.status == 'completed' %}
                             <i data-feather="check-circle" class="me-1"></i>
                             Análisis Completado
@@ -58,7 +84,7 @@
                 <div class="card-body text-center py-5">
                     <div class="spinner-border text-primary mb-3" role="status"></div>
                     <h5>Analizando tu clase...</h5>
-                    <p class="text-muted">
+                    <p class="text-secondary">
                         Estamos procesando tu audio con IA avanzada. Esto puede tomar unos minutos.
                     </p>
                     <div class="progress-steps mt-4">
@@ -91,9 +117,9 @@
         <div class="col-12">
             <div class="alert alert-danger">
                 <h5><i data-feather="alert-circle" class="me-2"></i>Error en el Análisis</h5>
-                <p class="mb-0">{{ analysis.error_message or 'Ocurrió un error inesperado durante el análisis.' }}</p>
+                <p class="mb-0 text-secondary">{{ analysis.error_message or 'Ocurrió un error inesperado durante el análisis.' }}</p>
                 <hr>
-                <a href="{{ url_for('index') }}" class="btn btn-outline-danger">
+                <a href="{{ url_for('index') }}" class="btn btn-soft-primary">
                     <i data-feather="refresh-cw" class="me-2"></i>
                     Intentar Nuevamente
                 </a>
