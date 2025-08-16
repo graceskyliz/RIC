@@ -8,24 +8,25 @@
     <div class="row align-items-center mb-5">
         <div class="col-lg-6">
             <h1 class="display-4 fw-bold text-primary mb-3">
+                <i data-feather="graduation-cap" class="me-3"></i>
                 Mejora tu Enseñanza con IA
             </h1>
             <p class="lead text-muted mb-4">
-                RIC analiza tu audio de clase y proporciona retroalimentación educativa inteligente 
-                sobre tu entrega, claridad y técnicas de enseñanza.
+                RIC analiza tu audio de clase y proporciona retroalimentación educativa personalizada 
+                según el grado y materia que enseñas. Obtén consejos específicos para mejorar tu técnica pedagógica.
             </p>
             <div class="d-flex gap-3 mb-4">
                 <div class="feature-badge">
-                    <i data-feather="mic" class="me-2"></i>
-                    Transcripción Automática
+                    <i data-feather="volume-2" class="me-2"></i>
+                    Análisis de Voz
                 </div>
                 <div class="feature-badge">
-                    <i data-feather="bar-chart-2" class="me-2"></i>
-                    Análisis Prosódico
+                    <i data-feather="users" class="me-2"></i>
+                    Feedback por Grado
                 </div>
                 <div class="feature-badge">
-                    <i data-feather="brain" class="me-2"></i>
-                    IA GPT-4 Turbo
+                    <i data-feather="book-open" class="me-2"></i>
+                    Consejos Pedagógicos
                 </div>
             </div>
         </div>
@@ -35,32 +36,106 @@
             <div class="card shadow-lg">
                 <div class="card-header bg-primary text-white">
                     <h5 class="card-title mb-0">
-                        <i data-feather="upload" class="me-2"></i>
-                        Subir Audio de Clase
+                        <i data-feather="mic" class="me-2"></i>
+                        Analizar Clase
                     </h5>
                 </div>
                 <div class="card-body p-4">
                     <form action="{{ url_for('upload_audio') }}" method="post" enctype="multipart/form-data" id="uploadForm">
-                        <div class="upload-area mb-3" onclick="document.getElementById('audioFile').click()">
-                            <div class="upload-content">
-                                <i data-feather="file-audio" class="upload-icon"></i>
-                                <h6 class="mt-3">Haz clic para seleccionar archivo</h6>
-                                <p class="text-muted small mb-0">
-                                    Formatos soportados: MP3, WAV, M4A, OGG, FLAC<br>
-                                    Tamaño máximo: 100MB
-                                </p>
+                        <!-- Educational Context -->
+                        <div class="educational-context mb-4">
+                            <h6 class="text-muted mb-3">
+                                <i data-feather="info" class="me-2"></i>
+                                Contexto Educativo
+                            </h6>
+                            
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="subject" class="form-label">Materia/Asignatura</label>
+                                    <select class="form-select" id="subject" name="subject" required>
+                                        <option value="">Selecciona una materia</option>
+                                        <option value="Matemáticas">Matemáticas</option>
+                                        <option value="Español">Español / Lenguaje</option>
+                                        <option value="Ciencias Naturales">Ciencias Naturales</option>
+                                        <option value="Ciencias Sociales">Ciencias Sociales / Historia</option>
+                                        <option value="Inglés">Inglés</option>
+                                        <option value="Educación Física">Educación Física</option>
+                                        <option value="Arte">Arte / Educación Artística</option>
+                                        <option value="Tecnología">Tecnología</option>
+                                        <option value="Física">Física</option>
+                                        <option value="Química">Química</option>
+                                        <option value="Biología">Biología</option>
+                                        <option value="Otro">Otra materia</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="grade_level" class="form-label">Grado Escolar</label>
+                                    <select class="form-select" id="grade_level" name="grade_level" required>
+                                        <option value="">Selecciona el grado</option>
+                                        <option value="Preescolar">Preescolar</option>
+                                        <option value="1° Primaria">1° Primaria</option>
+                                        <option value="2° Primaria">2° Primaria</option>
+                                        <option value="3° Primaria">3° Primaria</option>
+                                        <option value="4° Primaria">4° Primaria</option>
+                                        <option value="5° Primaria">5° Primaria</option>
+                                        <option value="6° Primaria">6° Primaria</option>
+                                        <option value="1° Secundaria">1° Secundaria</option>
+                                        <option value="2° Secundaria">2° Secundaria</option>
+                                        <option value="3° Secundaria">3° Secundaria</option>
+                                        <option value="1° Preparatoria">1° Preparatoria</option>
+                                        <option value="2° Preparatoria">2° Preparatoria</option>
+                                        <option value="3° Preparatoria">3° Preparatoria</option>
+                                        <option value="Universidad">Universidad</option>
+                                    </select>
+                                </div>
                             </div>
-                            <input type="file" id="audioFile" name="audio_file" accept=".mp3,.wav,.m4a,.ogg,.flac" style="display: none;" required>
+                            
+                            <div class="row g-3 mt-2">
+                                <div class="col-12">
+                                    <label for="lesson_topic" class="form-label">Tema de la Clase</label>
+                                    <input type="text" class="form-control" id="lesson_topic" name="lesson_topic" 
+                                           placeholder="Ej: Fracciones, La Revolución Mexicana, Ecosistemas, etc." required>
+                                </div>
+                            </div>
+                            
+                            <div class="row g-3 mt-2">
+                                <div class="col-12">
+                                    <label for="additional_context" class="form-label">Contexto Adicional (Opcional)</label>
+                                    <textarea class="form-control" id="additional_context" name="additional_context" rows="2" 
+                                              placeholder="Información adicional que ayude al análisis: tipo de actividad, dificultades esperadas, objetivos específicos, etc."></textarea>
+                                </div>
+                            </div>
                         </div>
                         
-                        <div id="fileInfo" class="alert alert-info d-none">
-                            <i data-feather="file" class="me-2"></i>
-                            <span id="fileName"></span>
+                        <!-- Audio Upload -->
+                        <div class="upload-section">
+                            <h6 class="text-muted mb-3">
+                                <i data-feather="upload" class="me-2"></i>
+                                Audio de la Clase
+                            </h6>
+                            
+                            <div class="upload-area mb-3" onclick="document.getElementById('audioFile').click()">
+                                <div class="upload-content">
+                                    <i data-feather="mic" class="upload-icon"></i>
+                                    <h6 class="mt-3">Haz clic para seleccionar archivo de audio</h6>
+                                    <p class="text-muted small mb-0">
+                                        Formatos soportados: MP3, WAV, M4A, OGG, FLAC<br>
+                                        Tamaño máximo: 100MB
+                                    </p>
+                                </div>
+                                <input type="file" id="audioFile" name="audio_file" accept=".mp3,.wav,.m4a,.ogg,.flac" style="display: none;" required>
+                            </div>
+                            
+                            <div id="fileInfo" class="alert alert-info d-none">
+                                <i data-feather="file" class="me-2"></i>
+                                <span id="fileName"></span>
+                            </div>
                         </div>
                         
                         <button type="submit" class="btn btn-primary btn-lg w-100" id="uploadBtn">
-                            <i data-feather="upload" class="me-2"></i>
-                            Subir y Analizar
+                            <i data-feather="zap" class="me-2"></i>
+                            Analizar mi Clase
                         </button>
                     </form>
                 </div>
@@ -120,29 +195,29 @@
                     <div class="feature-icon mb-3">
                         <i data-feather="upload-cloud"></i>
                     </div>
-                    <h5>1. Sube tu Audio</h5>
+                    <h5>1. Contexto + Audio</h5>
                     <p class="text-muted">
-                        Sube una grabación de tu clase en cualquier formato de audio compatible.
+                        Proporciona el grado, materia y tema de tu clase junto con el audio para un análisis preciso.
                     </p>
                 </div>
                 
                 <div class="col-md-4 text-center">
                     <div class="feature-icon mb-3">
-                        <i data-feather="cpu"></i>
+                        <i data-feather="search"></i>
                     </div>
-                    <h5>2. Análisis Inteligente</h5>
+                    <h5>2. Análisis Pedagógico</h5>
                     <p class="text-muted">
-                        IA analiza tu discurso, entonación, pausas y claridad usando tecnología avanzada.
+                        IA evalúa si tu lenguaje y técnicas son apropiados para el nivel educativo de tus estudiantes.
                     </p>
                 </div>
                 
                 <div class="col-md-4 text-center">
                     <div class="feature-icon mb-3">
-                        <i data-feather="target"></i>
+                        <i data-feather="star"></i>
                     </div>
-                    <h5>3. Retroalimentación Personalizada</h5>
+                    <h5>3. Consejos Específicos</h5>
                     <p class="text-muted">
-                        Recibe recomendaciones específicas para mejorar tu técnica de enseñanza.
+                        Recibe sugerencias personalizadas: desde simplificar conceptos hasta usar mejores analogías.
                     </p>
                 </div>
             </div>

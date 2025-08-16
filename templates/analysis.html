@@ -17,10 +17,17 @@
             <div class="d-flex align-items-center justify-content-between">
                 <div>
                     <h1 class="h3 mb-1">{{ analysis.original_filename }}</h1>
-                    <p class="text-muted mb-0">
+                    <p class="text-muted mb-1">
                         <i data-feather="calendar" class="me-1"></i>
                         Subido el {{ analysis.upload_timestamp.strftime('%d/%m/%Y a las %H:%M') }}
                     </p>
+                    {% if analysis.subject or analysis.grade_level or analysis.lesson_topic %}
+                    <div class="educational-context-summary">
+                        {% if analysis.subject %}<span class="badge bg-secondary me-1">{{ analysis.subject }}</span>{% endif %}
+                        {% if analysis.grade_level %}<span class="badge bg-info me-1">{{ analysis.grade_level }}</span>{% endif %}
+                        {% if analysis.lesson_topic %}<span class="badge bg-light text-dark me-1">{{ analysis.lesson_topic }}</span>{% endif %}
+                    </div>
+                    {% endif %}
                 </div>
                 <div class="status-badge">
                     <span class="badge bg-{% if analysis.status == 'completed' %}success{% elif analysis.status == 'error' %}danger{% elif analysis.status == 'processing' %}warning{% else %}secondary{% endif %} fs-6">
@@ -164,7 +171,7 @@ function displayResults(data) {
 
         <!-- Key Metrics -->
         <div class="row mb-4">
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <div class="metric-card">
                     <div class="metric-icon">
                         <i data-feather="clock"></i>
@@ -174,7 +181,7 @@ function displayResults(data) {
                     <div class="metric-status ${getSpeedStatus(transcription.wpm)}">${getSpeedText(transcription.wpm)}</div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <div class="metric-card">
                     <div class="metric-icon">
                         <i data-feather="pause"></i>
@@ -184,7 +191,7 @@ function displayResults(data) {
                     <div class="metric-status ${getPauseStatus(feedback.key_metrics.pause_effectiveness)}">${feedback.key_metrics.pause_effectiveness}</div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <div class="metric-card">
                     <div class="metric-icon">
                         <i data-feather="volume-2"></i>
@@ -194,7 +201,7 @@ function displayResults(data) {
                     <div class="metric-status ${getConfidenceStatus(feedback.key_metrics.vocal_confidence)}">${feedback.key_metrics.vocal_confidence}</div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <div class="metric-card">
                     <div class="metric-icon">
                         <i data-feather="filter"></i>
@@ -202,6 +209,16 @@ function displayResults(data) {
                     <div class="metric-value">${transcription.filler_count}</div>
                     <div class="metric-label">Muletillas</div>
                     <div class="metric-status ${getFillerStatus(feedback.key_metrics.filler_word_frequency)}">${feedback.key_metrics.filler_word_frequency}</div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i data-feather="graduation-cap"></i>
+                    </div>
+                    <div class="metric-value">${feedback.detailed_analysis.grade_level_appropriateness.score}</div>
+                    <div class="metric-label">Adecuación al Grado</div>
+                    <div class="metric-status ${getGradeStatus(feedback.key_metrics.grade_appropriateness)}">${feedback.key_metrics.grade_appropriateness}</div>
                 </div>
             </div>
         </div>
@@ -297,6 +314,44 @@ function displayResults(data) {
                             <ul class="small mt-2">
                                 ${feedback.detailed_analysis.professional_communication.recommendations.map(rec => `<li>${rec}</li>`).join('')}
                             </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grade Level Appropriateness -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card border-success">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0"><i data-feather="graduation-cap" class="me-2"></i>Adecuación al Nivel Educativo</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="progress flex-grow-1 me-3" style="height: 12px;">
+                                <div class="progress-bar bg-success" style="width: ${feedback.detailed_analysis.grade_level_appropriateness.score}%"></div>
+                            </div>
+                            <span class="fw-bold fs-5">${feedback.detailed_analysis.grade_level_appropriateness.score}/100</span>
+                        </div>
+                        <p class="mb-3">${feedback.detailed_analysis.grade_level_appropriateness.feedback}</p>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="recommendations">
+                                    <strong>Recomendaciones Específicas:</strong>
+                                    <ul class="mt-2">
+                                        ${feedback.detailed_analysis.grade_level_appropriateness.recommendations.map(rec => `<li>${rec}</li>`).join('')}
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="grade-tips">
+                                    <strong>Consejos para este Grado:</strong>
+                                    <ul class="mt-2">
+                                        ${feedback.grade_specific_tips ? feedback.grade_specific_tips.map(tip => `<li>${tip}</li>`).join('') : '<li>No hay consejos específicos disponibles</li>'}
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -449,6 +504,17 @@ function getFillerStatus(frequency) {
         'high': 'status-poor'
     };
     return statusMap[frequency] || 'status-fair';
+}
+
+function getGradeStatus(appropriateness) {
+    const statusMap = {
+        'adecuado': 'status-excellent',
+        'simple': 'status-good',
+        'complejo': 'status-good',
+        'muy_simple': 'status-poor',
+        'muy_complejo': 'status-poor'
+    };
+    return statusMap[appropriateness] || 'status-fair';
 }
 
 function showError(message) {

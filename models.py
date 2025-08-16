@@ -9,6 +9,12 @@ class AudioAnalysis(db.Model):
     upload_timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     analysis_timestamp = db.Column(db.DateTime)
     
+    # Educational context
+    subject = db.Column(db.String(100))  # Materia/asignatura
+    grade_level = db.Column(db.String(50))  # Grado escolar
+    lesson_topic = db.Column(db.String(255))  # Tema de la clase
+    additional_context = db.Column(db.Text)  # Contexto adicional
+    
     # Transcription results
     transcription_text = db.Column(db.Text)
     transcription_data = db.Column(db.Text)  # JSON string for detailed transcription
@@ -61,3 +67,12 @@ class AudioAnalysis(db.Model):
     def set_ric_feedback(self, data):
         """Store RIC feedback as JSON"""
         self.ric_feedback = json.dumps(data)
+    
+    def get_educational_context(self):
+        """Get educational context as dictionary"""
+        return {
+            'subject': self.subject or 'General',
+            'grade_level': self.grade_level or 'No especificado',
+            'lesson_topic': self.lesson_topic or 'Tema general',
+            'additional_context': self.additional_context or ''
+        }

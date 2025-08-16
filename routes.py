@@ -22,7 +22,7 @@ def index():
 
 @app.route('/upload', methods=['POST'])
 def upload_audio():
-    """Handle audio file upload"""
+    """Handle audio file upload with educational context"""
     try:
         if 'audio_file' not in request.files:
             flash('No file selected', 'error')
@@ -48,12 +48,21 @@ def upload_audio():
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(filepath)
         
+        # Get educational context from form
+        subject = request.form.get('subject', '').strip()
+        grade_level = request.form.get('grade_level', '').strip()
+        lesson_topic = request.form.get('lesson_topic', '').strip()
+        additional_context = request.form.get('additional_context', '').strip()
+        
         # Create database record
-        analysis = AudioAnalysis(
-            filename=filename,
-            original_filename=file.filename,
-            status='uploaded'
-        )
+        analysis = AudioAnalysis()
+        analysis.filename = filename
+        analysis.original_filename = file.filename
+        analysis.subject = subject
+        analysis.grade_level = grade_level
+        analysis.lesson_topic = lesson_topic
+        analysis.additional_context = additional_context
+        analysis.status = 'uploaded'
         db.session.add(analysis)
         db.session.commit()
         
@@ -140,10 +149,12 @@ def process_audio_analysis(analysis):
         
         logging.info(f"Starting RIC feedback generation for {analysis.filename}")
         
-        # Step 3: Generate RIC feedback
+        # Step 3: Generate RIC feedback with educational context
+        educational_context = analysis.get_educational_context()
         combined_data = {
             'transcription': transcription_result,
-            'prosody': prosody_result
+            'prosody': prosody_result,
+            'educational_context': educational_context
         }
         
         feedback = ric_agent.generate_educational_feedback(combined_data)

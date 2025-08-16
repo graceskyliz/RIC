@@ -1,14 +1,17 @@
 /* RIC - Reflective Instruction Coach Styles */
 
 :root {
-    --primary-color: #2563eb;
+    --primary-color: #059669; /* Educational green */
     --secondary-color: #64748b;
     --success-color: #10b981;
     --warning-color: #f59e0b;
     --danger-color: #ef4444;
+    --accent-color: #7c3aed; /* Purple for education */
     --light-gray: #f8fafc;
     --medium-gray: #e2e8f0;
     --dark-gray: #334155;
+    --educational-blue: #3b82f6;
+    --educational-orange: #f97316;
     --border-radius: 12px;
     --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
@@ -383,4 +386,49 @@ body {
         background: white;
         color: black;
     }
+}
+
+/* Educational Context Styling */
+.educational-context {
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    border: 1px solid #bae6fd;
+}
+
+.educational-context-summary {
+    margin-top: 0.5rem;
+}
+
+.educational-context-summary .badge {
+    font-size: 0.75rem;
+    padding: 0.35rem 0.65rem;
+}
+
+.upload-section {
+    background: #ffffff;
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    border: 1px solid var(--medium-gray);
+}
+
+/* Educational Theme Colors */
+.bg-educational-primary {
+    background: linear-gradient(135deg, var(--primary-color), #047857);
+}
+
+.bg-educational-secondary {
+    background: linear-gradient(135deg, var(--accent-color), #6366f1);
+}
+
+/* Grade-specific color coding */
+.grade-tips {
+    background: rgba(124, 58, 237, 0.1);
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid var(--accent-color);
+}
+
+.grade-tips strong {
+    color: var(--accent-color);
 }
