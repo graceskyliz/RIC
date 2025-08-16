@@ -115,16 +115,78 @@
                                 Audio de la Clase
                             </h6>
                             
-                            <div class="upload-area mb-3" onclick="document.getElementById('audioFile').click()">
+                            <!-- Recording/Upload Options -->
+                            <div class="audio-options mb-3">
+                                <div class="btn-group w-100" role="group">
+                                    <button type="button" class="btn btn-outline-primary" id="recordBtn">
+                                        <i data-feather="mic" class="me-2"></i>
+                                        Grabar Audio
+                                    </button>
+                                    <button type="button" class="btn btn-outline-secondary" id="uploadBtn2" onclick="document.getElementById('audioFile').click()">
+                                        <i data-feather="upload" class="me-2"></i>
+                                        Subir Archivo
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Recording Interface -->
+                            <div id="recordingInterface" class="recording-interface d-none mb-3">
+                                <div class="text-center p-4 border rounded">
+                                    <div class="recording-icon mb-3">
+                                        <i data-feather="mic" class="recording-pulse" style="width: 48px; height: 48px; color: #dc3545;"></i>
+                                    </div>
+                                    <h6 id="recordingStatus">Preparando micrófono...</h6>
+                                    <div id="recordingTimer" class="fw-bold text-primary fs-4 mb-3">00:00</div>
+                                    <div class="d-flex gap-2 justify-content-center">
+                                        <button type="button" class="btn btn-success" id="startRecordBtn">
+                                            <i data-feather="play" class="me-2"></i>
+                                            Iniciar
+                                        </button>
+                                        <button type="button" class="btn btn-danger d-none" id="stopRecordBtn">
+                                            <i data-feather="stop" class="me-2"></i>
+                                            Detener
+                                        </button>
+                                        <button type="button" class="btn btn-secondary" id="cancelRecordBtn">
+                                            <i data-feather="x" class="me-2"></i>
+                                            Cancelar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- File Upload Area -->
+                            <div id="uploadArea" class="upload-area mb-3" onclick="document.getElementById('audioFile').click()">
                                 <div class="upload-content">
-                                    <i data-feather="mic" class="upload-icon"></i>
+                                    <i data-feather="upload" class="upload-icon"></i>
                                     <h6 class="mt-3">Haz clic para seleccionar archivo de audio</h6>
                                     <p class="text-muted small mb-0">
                                         Formatos soportados: MP3, WAV, M4A, OGG, FLAC<br>
                                         Tamaño máximo: 100MB
                                     </p>
                                 </div>
-                                <input type="file" id="audioFile" name="audio_file" accept=".mp3,.wav,.m4a,.ogg,.flac" style="display: none;" required>
+                                <input type="file" id="audioFile" name="audio_file" accept=".mp3,.wav,.m4a,.ogg,.flac" style="display: none;">
+                            </div>
+                            
+                            <!-- Recorded Audio Preview -->
+                            <div id="recordedAudioInfo" class="alert alert-success d-none">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div>
+                                        <i data-feather="mic" class="me-2"></i>
+                                        <span id="recordedFileName">Grabación completada</span>
+                                        <small class="text-muted d-block">Duración: <span id="recordedDuration">00:00</span></small>
+                                    </div>
+                                    <div>
+                                        <button type="button" class="btn btn-sm btn-outline-primary me-2" id="playRecordedBtn">
+                                            <i data-feather="play" class="me-1"></i>
+                                            Reproducir
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-outline-danger" id="deleteRecordedBtn">
+                                            <i data-feather="trash-2" class="me-1"></i>
+                                            Eliminar
+                                        </button>
+                                    </div>
+                                </div>
+                                <audio id="recordedAudioPlayer" class="d-none" controls></audio>
                             </div>
                             
                             <div id="fileInfo" class="alert alert-info d-none">
@@ -133,7 +195,7 @@
                             </div>
                         </div>
                         
-                        <button type="submit" class="btn btn-primary btn-lg w-100" id="uploadBtn">
+                        <button type="submit" class="btn btn-primary btn-lg w-100" id="submitBtn">
                             <i data-feather="zap" class="me-2"></i>
                             Analizar mi Clase
                         </button>
@@ -228,38 +290,261 @@
 
 {% block scripts %}
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const fileInput = document.getElementById('audioFile');
-    const fileInfo = document.getElementById('fileInfo');
-    const fileName = document.getElementById('fileName');
-    const uploadForm = document.getElementById('uploadForm');
-    const uploadBtn = document.getElementById('uploadBtn');
-
-    // Handle file selection
-    fileInput.addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file) {
-            fileName.textContent = file.name;
-            fileInfo.classList.remove('d-none');
-            
-            // Update feather icons
-            feather.replace();
+class AudioRecorder {
+    constructor() {
+        this.mediaRecorder = null;
+        this.audioChunks = [];
+        this.recordedBlob = null;
+        this.startTime = null;
+        this.timerInterval = null;
+        this.stream = null;
+        
+        this.initializeElements();
+        this.setupEventListeners();
+    }
+    
+    initializeElements() {
+        this.recordBtn = document.getElementById('recordBtn');
+        this.uploadBtn2 = document.getElementById('uploadBtn2');
+        this.recordingInterface = document.getElementById('recordingInterface');
+        this.uploadArea = document.getElementById('uploadArea');
+        this.startRecordBtn = document.getElementById('startRecordBtn');
+        this.stopRecordBtn = document.getElementById('stopRecordBtn');
+        this.cancelRecordBtn = document.getElementById('cancelRecordBtn');
+        this.recordingStatus = document.getElementById('recordingStatus');
+        this.recordingTimer = document.getElementById('recordingTimer');
+        this.recordedAudioInfo = document.getElementById('recordedAudioInfo');
+        this.recordedFileName = document.getElementById('recordedFileName');
+        this.recordedDuration = document.getElementById('recordedDuration');
+        this.playRecordedBtn = document.getElementById('playRecordedBtn');
+        this.deleteRecordedBtn = document.getElementById('deleteRecordedBtn');
+        this.recordedAudioPlayer = document.getElementById('recordedAudioPlayer');
+        this.fileInput = document.getElementById('audioFile');
+        this.fileInfo = document.getElementById('fileInfo');
+        this.fileName = document.getElementById('fileName');
+        this.uploadForm = document.getElementById('uploadForm');
+        this.submitBtn = document.getElementById('submitBtn');
+    }
+    
+    setupEventListeners() {
+        this.recordBtn.addEventListener('click', () => this.showRecordingInterface());
+        this.uploadBtn2.addEventListener('click', () => this.showUploadInterface());
+        this.startRecordBtn.addEventListener('click', () => this.startRecording());
+        this.stopRecordBtn.addEventListener('click', () => this.stopRecording());
+        this.cancelRecordBtn.addEventListener('click', () => this.cancelRecording());
+        this.playRecordedBtn.addEventListener('click', () => this.playRecordedAudio());
+        this.deleteRecordedBtn.addEventListener('click', () => this.deleteRecordedAudio());
+        
+        // File input handling
+        this.fileInput.addEventListener('change', (e) => this.handleFileSelection(e));
+        
+        // Form submission
+        this.uploadForm.addEventListener('submit', (e) => this.handleFormSubmission(e));
+    }
+    
+    async showRecordingInterface() {
+        this.recordingInterface.classList.remove('d-none');
+        this.uploadArea.classList.add('d-none');
+        this.recordedAudioInfo.classList.add('d-none');
+        this.fileInfo.classList.add('d-none');
+        
+        try {
+            this.stream = await navigator.mediaDevices.getUserMedia({ 
+                audio: {
+                    echoCancellation: true,
+                    noiseSuppression: true,
+                    sampleRate: 44100
+                } 
+            });
+            this.recordingStatus.textContent = 'Listo para grabar';
+            this.startRecordBtn.classList.remove('d-none');
+        } catch (error) {
+            console.error('Error accessing microphone:', error);
+            this.recordingStatus.textContent = 'Error: No se puede acceder al micrófono';
+            this.startRecordBtn.classList.add('d-none');
         }
-    });
-
-    // Handle form submission
-    uploadForm.addEventListener('submit', function(e) {
-        const file = fileInput.files[0];
-        if (!file) {
-            e.preventDefault();
-            alert('Por favor selecciona un archivo de audio.');
+        
+        feather.replace();
+    }
+    
+    showUploadInterface() {
+        this.recordingInterface.classList.add('d-none');
+        this.uploadArea.classList.remove('d-none');
+        this.recordedAudioInfo.classList.add('d-none');
+        
+        if (this.stream) {
+            this.stream.getTracks().forEach(track => track.stop());
+            this.stream = null;
+        }
+    }
+    
+    startRecording() {
+        if (!this.stream) {
+            alert('Error: No hay acceso al micrófono');
             return;
         }
-
+        
+        this.audioChunks = [];
+        this.mediaRecorder = new MediaRecorder(this.stream);
+        
+        this.mediaRecorder.ondataavailable = (event) => {
+            if (event.data.size > 0) {
+                this.audioChunks.push(event.data);
+            }
+        };
+        
+        this.mediaRecorder.onstop = () => {
+            this.recordedBlob = new Blob(this.audioChunks, { type: 'audio/wav' });
+            this.showRecordedAudio();
+        };
+        
+        this.mediaRecorder.start();
+        this.startTime = Date.now();
+        this.startTimer();
+        
+        this.recordingStatus.textContent = '🔴 Grabando...';
+        this.startRecordBtn.classList.add('d-none');
+        this.stopRecordBtn.classList.remove('d-none');
+    }
+    
+    stopRecording() {
+        if (this.mediaRecorder && this.mediaRecorder.state === 'recording') {
+            this.mediaRecorder.stop();
+            this.stopTimer();
+            
+            if (this.stream) {
+                this.stream.getTracks().forEach(track => track.stop());
+                this.stream = null;
+            }
+        }
+    }
+    
+    cancelRecording() {
+        if (this.mediaRecorder && this.mediaRecorder.state === 'recording') {
+            this.mediaRecorder.stop();
+            this.stopTimer();
+        }
+        
+        if (this.stream) {
+            this.stream.getTracks().forEach(track => track.stop());
+            this.stream = null;
+        }
+        
+        this.recordingInterface.classList.add('d-none');
+        this.uploadArea.classList.remove('d-none');
+        this.audioChunks = [];
+        this.recordedBlob = null;
+    }
+    
+    startTimer() {
+        this.timerInterval = setInterval(() => {
+            const elapsed = Math.floor((Date.now() - this.startTime) / 1000);
+            const minutes = Math.floor(elapsed / 60);
+            const seconds = elapsed % 60;
+            this.recordingTimer.textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }, 1000);
+    }
+    
+    stopTimer() {
+        if (this.timerInterval) {
+            clearInterval(this.timerInterval);
+            this.timerInterval = null;
+        }
+    }
+    
+    showRecordedAudio() {
+        const duration = this.recordingTimer.textContent;
+        const timestamp = new Date().toLocaleTimeString('es-ES', { 
+            hour12: false, 
+            hour: '2-digit', 
+            minute: '2-digit' 
+        });
+        
+        this.recordedFileName.textContent = `Grabación ${timestamp}`;
+        this.recordedDuration.textContent = duration;
+        
+        // Create audio URL for playback
+        const audioUrl = URL.createObjectURL(this.recordedBlob);
+        this.recordedAudioPlayer.src = audioUrl;
+        
+        this.recordingInterface.classList.add('d-none');
+        this.recordedAudioInfo.classList.remove('d-none');
+        
+        // Create a File object from the blob for form submission
+        const timestamp2 = new Date().toISOString().slice(0, 19).replace(/[:-]/g, '');
+        const file = new File([this.recordedBlob], `grabacion_${timestamp2}.wav`, {
+            type: 'audio/wav',
+            lastModified: Date.now()
+        });
+        
+        // Update file input with recorded file
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
+        this.fileInput.files = dataTransfer.files;
+        this.fileInput.required = false; // Remove required since we have a recorded file
+        
+        feather.replace();
+    }
+    
+    playRecordedAudio() {
+        if (this.recordedAudioPlayer.paused) {
+            this.recordedAudioPlayer.play();
+            this.playRecordedBtn.innerHTML = '<i data-feather="pause" class="me-1"></i>Pausar';
+        } else {
+            this.recordedAudioPlayer.pause();
+            this.playRecordedBtn.innerHTML = '<i data-feather="play" class="me-1"></i>Reproducir';
+        }
+        feather.replace();
+    }
+    
+    deleteRecordedAudio() {
+        this.recordedBlob = null;
+        this.audioChunks = [];
+        this.recordedAudioInfo.classList.add('d-none');
+        this.uploadArea.classList.remove('d-none');
+        
+        // Clear file input
+        this.fileInput.value = '';
+        this.fileInput.required = true;
+        
+        // Reset audio player
+        this.recordedAudioPlayer.src = '';
+        this.playRecordedBtn.innerHTML = '<i data-feather="play" class="me-1"></i>Reproducir';
+        
+        feather.replace();
+    }
+    
+    handleFileSelection(e) {
+        const file = e.target.files[0];
+        if (file) {
+            this.fileName.textContent = file.name;
+            this.fileInfo.classList.remove('d-none');
+            this.recordedAudioInfo.classList.add('d-none');
+            
+            feather.replace();
+        }
+    }
+    
+    handleFormSubmission(e) {
+        const hasFile = this.fileInput.files && this.fileInput.files.length > 0;
+        const hasRecording = this.recordedBlob !== null;
+        
+        if (!hasFile && !hasRecording) {
+            e.preventDefault();
+            alert('Por favor graba un audio o selecciona un archivo de audio.');
+            return;
+        }
+        
         // Show loading state
-        uploadBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Subiendo...';
-        uploadBtn.disabled = true;
-    });
+        this.submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Analizando...';
+        this.submitBtn.disabled = true;
+    }
+}
+
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    new AudioRecorder();
 });
 </script>
 {% endblock %}

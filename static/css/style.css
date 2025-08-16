@@ -432,3 +432,125 @@ body {
 .grade-tips strong {
     color: var(--accent-color);
 }
+
+/* Audio Recording Interface */
+.audio-options .btn-group {
+    box-shadow: var(--box-shadow);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+.recording-interface {
+    background: linear-gradient(135deg, #fef2f2, #fee2e2);
+    border: 2px solid #fca5a5;
+    border-radius: var(--border-radius);
+    transition: all 0.3s ease;
+}
+
+.recording-interface.recording {
+    animation: pulse-border 2s infinite;
+}
+
+.recording-icon {
+    position: relative;
+}
+
+.recording-pulse {
+    animation: pulse-mic 2s infinite ease-in-out;
+}
+
+@keyframes pulse-mic {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+}
+
+@keyframes pulse-border {
+    0%, 100% {
+        border-color: #fca5a5;
+        box-shadow: 0 0 0 0 rgba(252, 165, 165, 0.7);
+    }
+    50% {
+        border-color: #ef4444;
+        box-shadow: 0 0 0 10px rgba(252, 165, 165, 0);
+    }
+}
+
+.recording-interface .btn {
+    margin: 0 0.25rem;
+    min-width: 100px;
+}
+
+/* Audio Controls */
+.recorded-audio-controls {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.audio-timer {
+    font-family: 'Courier New', monospace;
+    letter-spacing: 1px;
+}
+
+/* Microphone Button States */
+.btn-record {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    border: none;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.btn-record:hover {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(239, 68, 68, 0.3);
+}
+
+.btn-record.recording {
+    animation: pulse 2s infinite;
+}
+
+/* Audio Preview */
+.audio-preview {
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    border-radius: var(--border-radius);
+    padding: 1rem;
+}
+
+.audio-preview audio {
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .audio-options .btn-group {
+        flex-direction: column;
+    }
+    
+    .audio-options .btn {
+        border-radius: 0;
+        margin-bottom: -1px;
+    }
+    
+    .audio-options .btn:first-child {
+        border-radius: var(--border-radius) var(--border-radius) 0 0;
+    }
+    
+    .audio-options .btn:last-child {
+        border-radius: 0 0 var(--border-radius) var(--border-radius);
+        margin-bottom: 0;
+    }
+    
+    .recording-interface .btn {
+        margin: 0.25rem 0;
+        width: 100%;
+    }
+}

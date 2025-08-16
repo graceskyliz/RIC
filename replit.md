@@ -14,9 +14,10 @@ Preferred communication style: Simple, everyday language.
 
 ### Frontend Architecture
 - **Template Engine**: Jinja2 templates with Bootstrap 5 for responsive UI
-- **Client-Side Framework**: Vanilla JavaScript with modern ES6+ features
+- **Client-Side Framework**: Vanilla JavaScript with modern ES6+ features and Web Audio API
 - **Styling**: Custom CSS with Bootstrap components and Feather icons
 - **File Upload**: Drag-and-drop interface supporting multiple audio formats (MP3, WAV, M4A, OGG, FLAC)
+- **Audio Recording**: Real-time microphone recording with Web Audio API, live timer, and playback preview
 - **Real-time Updates**: Auto-refresh mechanism for processing status updates
 
 ### Backend Architecture
