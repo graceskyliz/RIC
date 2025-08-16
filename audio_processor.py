@@ -41,12 +41,27 @@ class AudioProcessor:
             text = response.text
             segments = getattr(response, 'segments', [])
             
+            # Convert segments to serializable format
+            serializable_segments = []
+            for segment in segments:
+                serializable_segments.append({
+                    'id': getattr(segment, 'id', 0),
+                    'start': getattr(segment, 'start', 0.0),
+                    'end': getattr(segment, 'end', 0.0),
+                    'text': getattr(segment, 'text', ''),
+                    'tokens': getattr(segment, 'tokens', []),
+                    'temperature': getattr(segment, 'temperature', 0.0),
+                    'avg_logprob': getattr(segment, 'avg_logprob', 0.0),
+                    'compression_ratio': getattr(segment, 'compression_ratio', 0.0),
+                    'no_speech_prob': getattr(segment, 'no_speech_prob', 0.0)
+                })
+            
             # Calculate educational metrics
             metrics = self._calculate_speech_metrics(text, segments)
             
             return {
                 'text': text,
-                'segments': segments,
+                'segments': serializable_segments,
                 'duration': getattr(response, 'duration', 0),
                 **metrics
             }
