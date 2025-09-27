@@ -6,10 +6,14 @@ from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.exc import OperationalError
 from sqlalchemy import text
 from werkzeug.middleware.proxy_fix import ProxyFix
+from dotenv import load_dotenv  # <--- agregar esta importación
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
+
+# Cargar variables desde .env antes de leer os.environ
+load_dotenv()  # <--- agregar esta línea
 
 class Base(DeclarativeBase):
     pass
