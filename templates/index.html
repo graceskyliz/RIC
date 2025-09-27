@@ -5,7 +5,7 @@
 {% block content %}
 <div class="container my-5">
     <!-- Hero Section -->
-    <div class="hero-section text-center mb-5">
+    <div class="hero-section-colorful text-center mb-5">
         <h1 class="display-3 fw-bold text-primary mb-3">
             <i data-feather="award" class="me-3"></i>
             RIC - Coach de Enseñanza IA
@@ -17,7 +17,7 @@
     </div>
 
     <!-- Analysis Type Selection -->
-    <div class="analysis-options-section mb-5">
+    <div class="analysis-options-section-colorful mb-5">
         <div class="row justify-content-center">
             <div class="col-lg-10">
                 <h2 class="text-center mb-4 text-secondary">¿Qué quieres analizar hoy?</h2>
@@ -25,7 +25,7 @@
             <div class="row g-4">
                 <!-- Audio Analysis Option -->
                 <div class="col-md-6">
-                    <div class="card h-100 analysis-type-card" onclick="window.location.href='{{ url_for('upload_audio_page') }}'">
+                    <div class="card h-100 analysis-type-card audio-analysis-card" onclick="window.location.href='{{ url_for('upload_audio_page') }}'">
                         <div class="card-body text-center p-5">
                             <div class="analysis-icon mb-4">
                                 <i data-feather="volume-2" class="analysis-main-icon"></i>
@@ -61,7 +61,7 @@
 
                 <!-- PDF Analysis Option -->
                 <div class="col-md-6">
-                    <div class="card h-100 analysis-type-card" onclick="window.location.href='{{ url_for('upload_pdf_page') }}'">
+                    <div class="card h-100 analysis-type-card pdf-analysis-card" onclick="window.location.href='{{ url_for('upload_pdf_page') }}'">
                         <div class="card-body text-center p-5">
                             <div class="analysis-icon mb-4">
                                 <i data-feather="file-text" class="analysis-main-icon"></i>
@@ -100,11 +100,11 @@
     </div>
 
     <!-- Recent Analyses Section -->
-    <div class="recent-analyses-section">
+    <div class="recent-analyses-section-colorful">
         <div class="row justify-content-center">
             <div class="col-lg-10">
-                <div class="card">
-                <div class="card-header bg-light">
+                <div class="card recent-analyses-card">
+                <div class="card-header recent-analyses-header">
                     <h5 class="card-title mb-0">
                         <i data-feather="clock" class="me-2"></i>
                         Análisis Recientes
@@ -145,7 +145,7 @@
     </div>
 
     <!-- Benefits Section -->
-    <div class="benefits-section">
+    <div class="benefits-section-colorful">
         <div class="row justify-content-center">
             <div class="col-lg-10">
                 <div class="text-center mb-4">
@@ -155,21 +155,21 @@
             
             <div class="row g-4">
                 <div class="col-md-4">
-                    <div class="benefit-card text-center">
+                    <div class="benefit-card benefit-card-1 text-center">
                         <i data-feather="zap" class="benefit-icon text-primary mb-3"></i>
                         <h5>Retroalimentación Instantánea</h5>
                         <p class="text-muted">Obtén análisis inmediato de tu enseñanza con recomendaciones específicas.</p>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="benefit-card text-center">
+                    <div class="benefit-card benefit-card-2 text-center">
                         <i data-feather="trending-up" class="benefit-icon text-success mb-3"></i>
                         <h5>Mejora Continua</h5>
                         <p class="text-muted">Rastrea tu progreso y mejora constantemente con métricas objetivas.</p>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="benefit-card text-center">
+                    <div class="benefit-card benefit-card-3 text-center">
                         <i data-feather="users" class="benefit-icon text-warning mb-3"></i>
                         <h5>Específico por Grado</h5>
                         <p class="text-muted">Consejos adaptados al nivel educativo y materia que enseñas.</p>
@@ -182,23 +182,88 @@
 </div>
 
 <style>
-.analysis-type-card {
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border: 2px solid transparent;
+/* Colorful Sections */
+.hero-section-colorful {
+    background: linear-gradient(135deg, rgba(30, 136, 229, 0.12) 0%, rgba(126, 87, 194, 0.08) 50%, rgba(251, 140, 0, 0.06) 100%);
+    border-radius: var(--border-radius);
+    padding: 4rem 2rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 8px 32px rgba(30, 136, 229, 0.15);
+    backdrop-filter: blur(10px);
 }
 
-.analysis-type-card:hover {
-    transform: translateY(-5px);
-    border-color: var(--primary-color);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+.analysis-options-section-colorful {
+    background: linear-gradient(135deg, rgba(46, 125, 50, 0.08) 0%, rgba(30, 136, 229, 0.06) 50%, rgba(251, 192, 45, 0.04) 100%);
+    border-radius: var(--border-radius);
+    padding: 3rem 2rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 6px 28px rgba(46, 125, 50, 0.12);
+}
+
+.recent-analyses-section-colorful {
+    background: linear-gradient(135deg, rgba(126, 87, 194, 0.08) 0%, rgba(30, 136, 229, 0.06) 100%);
+    border-radius: var(--border-radius);
+    padding: 3rem 2rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 6px 28px rgba(126, 87, 194, 0.12);
+}
+
+.benefits-section-colorful {
+    background: linear-gradient(135deg, rgba(251, 140, 0, 0.08) 0%, rgba(251, 192, 45, 0.06) 50%, rgba(229, 57, 53, 0.04) 100%);
+    border-radius: var(--border-radius);
+    padding: 3rem 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 6px 28px rgba(251, 140, 0, 0.12);
+}
+
+/* Enhanced Analysis Cards */
+.analysis-type-card {
+    cursor: pointer;
+    transition: all 0.4s ease;
+    border: 3px solid transparent;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(250, 252, 255, 0.95) 100%);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+.audio-analysis-card {
+    border-left: 6px solid var(--color-primary);
+}
+
+.audio-analysis-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    border-color: var(--color-primary);
+    box-shadow: 0 20px 60px rgba(30, 136, 229, 0.25);
+    background: linear-gradient(135deg, rgba(30, 136, 229, 0.05) 0%, rgba(255, 255, 255, 0.98) 100%);
+}
+
+.pdf-analysis-card {
+    border-left: 6px solid var(--color-warning);
+}
+
+.pdf-analysis-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    border-color: var(--color-warning);
+    box-shadow: 0 20px 60px rgba(251, 192, 45, 0.25);
+    background: linear-gradient(135deg, rgba(251, 192, 45, 0.05) 0%, rgba(255, 255, 255, 0.98) 100%);
 }
 
 .analysis-main-icon {
     width: 64px;
     height: 64px;
     stroke-width: 1.5;
-    color: var(--primary-color);
+    color: var(--color-primary);
+    transition: all 0.3s ease;
+}
+
+.audio-analysis-card:hover .analysis-main-icon {
+    color: var(--color-primary);
+    transform: scale(1.1);
+}
+
+.pdf-analysis-card:hover .analysis-main-icon {
+    color: var(--color-warning);
+    transform: scale(1.1);
 }
 
 .features-list {
@@ -208,18 +273,124 @@
 .feature-item {
     display: flex;
     align-items: center;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.8rem;
     font-size: 0.9rem;
+    transition: all 0.3s ease;
 }
 
+.feature-item:hover {
+    transform: translateX(4px);
+}
+
+/* Recent Analyses Card */
+.recent-analyses-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(245, 247, 250, 0.95) 100%);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(126, 87, 194, 0.1);
+    box-shadow: 0 8px 32px rgba(126, 87, 194, 0.15);
+}
+
+.recent-analyses-header {
+    background: linear-gradient(135deg, var(--color-insight) 0%, rgba(126, 87, 194, 0.9) 100%);
+    color: white;
+    border-bottom: none;
+}
+
+/* Enhanced Benefit Cards */
 .benefit-card {
-    padding: 2rem 1rem;
+    padding: 2.5rem 1.5rem;
+    border-radius: var(--border-radius);
+    transition: all 0.4s ease;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(250, 252, 255, 0.95) 100%);
+    border: 2px solid transparent;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
+}
+
+.benefit-card-1 {
+    border-left: 4px solid var(--color-primary);
+}
+
+.benefit-card-1:hover {
+    transform: translateY(-6px);
+    border-color: var(--color-primary);
+    box-shadow: 0 16px 48px rgba(30, 136, 229, 0.2);
+    background: linear-gradient(135deg, rgba(30, 136, 229, 0.03) 0%, rgba(255, 255, 255, 0.98) 100%);
+}
+
+.benefit-card-2 {
+    border-left: 4px solid var(--color-success);
+}
+
+.benefit-card-2:hover {
+    transform: translateY(-6px);
+    border-color: var(--color-success);
+    box-shadow: 0 16px 48px rgba(46, 125, 50, 0.2);
+    background: linear-gradient(135deg, rgba(46, 125, 50, 0.03) 0%, rgba(255, 255, 255, 0.98) 100%);
+}
+
+.benefit-card-3 {
+    border-left: 4px solid var(--color-warning);
+}
+
+.benefit-card-3:hover {
+    transform: translateY(-6px);
+    border-color: var(--color-warning);
+    box-shadow: 0 16px 48px rgba(251, 192, 45, 0.2);
+    background: linear-gradient(135deg, rgba(251, 192, 45, 0.03) 0%, rgba(255, 255, 255, 0.98) 100%);
 }
 
 .benefit-icon {
-    width: 48px;
-    height: 48px;
+    width: 56px;
+    height: 56px;
     stroke-width: 1.5;
+    transition: all 0.3s ease;
+}
+
+.benefit-card:hover .benefit-icon {
+    transform: scale(1.15) rotate(5deg);
+}
+
+/* Enhanced Typography */
+.hero-section-colorful h1 {
+    text-shadow: 0 2px 8px rgba(30, 136, 229, 0.1);
+}
+
+.hero-section-colorful .lead {
+    color: var(--color-text) !important;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Button Enhancements */
+.btn {
+    transition: all 0.3s ease;
+    font-weight: 600;
+    border-radius: 12px;
+    padding: 12px 24px;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, var(--color-primary) 0%, rgba(30, 136, 229, 0.8) 100%);
+}
+
+.btn-warning:hover {
+    background: linear-gradient(135deg, var(--color-warning) 0%, rgba(251, 192, 45, 0.8) 100%);
+}
+
+/* Text Color Fixes */
+.analysis-options-section-colorful h2,
+.recent-analyses-section-colorful h5,
+.benefits-section-colorful h3,
+.benefits-section-colorful h5 {
+    color: var(--color-text) !important;
+}
+
+.benefit-card p {
+    color: var(--color-text-secondary) !important;
 }
 </style>
 
