@@ -276,8 +276,8 @@
 
 /* Enhance metric cards */
 .metric-card {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(245, 247, 250, 0.95) 100%);
-    border: 2px solid rgba(30, 136, 229, 0.1);
+    background: linear-gradient(135deg, #424453 0%, #2f313e 100%);
+    border: 2px solid #9da0e5;
     border-radius: var(--border-radius);
     padding: 1.5rem;
     text-align: center;
@@ -287,30 +287,30 @@
 
 .metric-card:hover {
     transform: translateY(-2px);
-    border-color: var(--color-primary);
-    box-shadow: 0 8px 32px rgba(30, 136, 229, 0.15);
+    border-color: #9da0e5;
+    box-shadow: 0 8px 32px rgba(157, 160, 229, 0.3);
 }
 
 .total-analysis-icon i {
-    color: #1E88E5 !important;
+    color: #9da0e5 !important;
     width: 48px;
     height: 48px;
 }
 
 .completed-icon i {
-    color: #2E7D32 !important;
+    color: #9da0e5 !important;
     width: 48px;
     height: 48px;
 }
 
 .processing-icon i {
-    color: #FBC02D !important;
+    color: #9da0e5 !important;
     width: 48px;
     height: 48px;
 }
 
 .error-icon i {
-    color: #E53935 !important;
+    color: #9da0e5 !important;
     width: 48px;
     height: 48px;
 }
@@ -322,12 +322,12 @@
 .metric-value {
     font-size: 2rem;
     font-weight: bold;
-    color: var(--color-text);
+    color: #ffffff;
     margin-bottom: 0.5rem;
 }
 
 .metric-label {
-    color: var(--color-text-secondary);
+    color: #ffffff;
     font-size: 0.9rem;
     font-weight: 500;
 }
@@ -339,7 +339,8 @@
 }
 
 .card.border-info .card-header {
-    background: linear-gradient(135deg, var(--color-primary) 0%, rgba(30, 136, 229, 0.9) 100%) !important;
+    background: linear-gradient(135deg, #9da0e5 0%, rgba(157, 160, 229, 0.9) 100%) !important;
+    color: #ffffff !important;
 }
 
 .card.border-info .card-body h6 {
@@ -371,49 +372,49 @@
 
 /* Subject and grade badges */
 .badge[class*="bg-subject-"] {
-    background: var(--color-primary) !important;
-    color: white !important;
+    background: #9da0e5 !important;
+    color: #ffffff !important;
 }
 
 .badge.bg-grade {
-    background: var(--color-success) !important;
-    color: white !important;
+    background: #9da0e5 !important;
+    color: #ffffff !important;
 }
 
 /* Status badges */
 .status-badge-success {
-    background: var(--color-success) !important;
-    color: white !important;
+    background: #9da0e5 !important;
+    color: #ffffff !important;
 }
 
 .status-badge-danger {
-    background: var(--color-danger) !important;
-    color: white !important;
+    background: #9da0e5 !important;
+    color: #ffffff !important;
 }
 
 .status-badge-warning {
-    background: var(--color-warning) !important;
-    color: var(--color-text) !important;
+    background: #9da0e5 !important;
+    color: #ffffff !important;
 }
 
 .status-badge-secondary {
-    background: var(--color-text-secondary) !important;
-    color: white !important;
+    background: #9da0e5 !important;
+    color: #ffffff !important;
 }
 
 /* Button enhancements */
 .btn-soft-primary {
-    background: rgba(30, 136, 229, 0.1);
-    border: 1px solid rgba(30, 136, 229, 0.2);
-    color: var(--color-primary);
+    background: rgba(157, 160, 229, 0.2);
+    border: 1px solid #9da0e5;
+    color: #9da0e5;
     transition: all 0.3s ease;
 }
 
 .btn-soft-primary:hover {
-    background: var(--color-primary);
-    color: white;
+    background: #9da0e5;
+    color: #ffffff;
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(30, 136, 229, 0.3);
+    box-shadow: 0 4px 12px rgba(157, 160, 229, 0.3);
 }
 
 /* Table enhancements */
@@ -458,6 +459,34 @@
 
 .table i[data-feather="download"] {
     color: var(--color-success) !important;
+}
+
+/* Table header styling */
+.table-light {
+    background-color: #9da0e5 !important;
+    color: #ffffff !important;
+}
+
+.table-light th {
+    background-color: #9da0e5 !important;
+    color: #ffffff !important;
+    border-color: #424453 !important;
+}
+
+/* Table body styling */
+.table tbody tr {
+    background-color: #424453 !important;
+    color: #ffffff !important;
+}
+
+.table tbody tr:hover {
+    background-color: rgba(157, 160, 229, 0.1) !important;
+}
+
+.table tbody td {
+    background-color: inherit !important;
+    color: #ffffff !important;
+    border-color: #2f313e !important;
 }
 </style>
 
