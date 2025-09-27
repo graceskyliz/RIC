@@ -14,7 +14,7 @@
     </nav>
 
     <!-- Analysis Header -->
-    <div class="row mb-4">
+    <div class="analysis-header-section row mb-4">
         <div class="col-md-8">
             <h1 class="display-6 fw-bold text-primary mb-2">
                 <i data-feather="file-text" class="me-3"></i>
@@ -68,9 +68,9 @@
         {% set structure = analysis.get_lesson_plan_structure() %}
         
         <!-- Overall Score -->
-        <div class="row mb-4">
+        <div class="score-section row mb-4">
             <div class="col-12">
-                <div class="card border-0 shadow-sm">
+                <div class="card border-0 shadow-sm score-card">
                     <div class="card-body text-center p-4">
                         <div class="score-circle-container">
                             <div class="score-circle mx-auto mb-3" data-score="{{ feedback.overall_score or 0 }}">
@@ -86,7 +86,7 @@
         </div>
 
         <!-- Quick Insights -->
-        <div class="row mb-4">
+        <div class="insights-section row mb-4">
             <div class="col-md-6">
                 <div class="card h-100">
                     <div class="card-header bg-success text-white">
@@ -139,9 +139,9 @@
 
         <!-- Detailed Analysis -->
         {% if feedback.detailed_analysis %}
-        <div class="row mb-4">
+        <div class="detailed-analysis-section row mb-4">
             <div class="col-12">
-                <div class="card">
+                <div class="card detailed-analysis-card">
                     <div class="card-header">
                         <h5 class="mb-0">
                             <i data-feather="bar-chart-2" class="me-2"></i>
@@ -314,9 +314,9 @@
 
         <!-- Action Plan -->
         {% if feedback.action_plan %}
-        <div class="row mb-4">
+        <div class="action-plan-section row mb-4">
             <div class="col-12">
-                <div class="card border-primary">
+                <div class="card border-primary action-plan-card">
                     <div class="card-header bg-primary text-white">
                         <h5 class="mb-0">
                             <i data-feather="list" class="me-2"></i>
@@ -336,7 +336,7 @@
         {% endif %}
 
         <!-- Grade-specific Recommendations and Resources -->
-        <div class="row mb-4">
+        <div class="recommendations-section row mb-4">
             {% if feedback.grade_specific_recommendations %}
             <div class="col-lg-6">
                 <div class="card h-100">
@@ -554,6 +554,113 @@
 
 .card-body .text-muted {
     color: var(--color-text-secondary) !important;
+}
+
+/* Colorful Sections */
+.analysis-header-section {
+    background: linear-gradient(135deg, rgba(30, 136, 229, 0.1) 0%, rgba(126, 87, 194, 0.08) 50%, rgba(251, 140, 0, 0.05) 100%);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 8px 32px rgba(30, 136, 229, 0.1);
+}
+
+.score-section {
+    background: linear-gradient(135deg, rgba(46, 125, 50, 0.08) 0%, rgba(30, 136, 229, 0.05) 100%);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 24px rgba(46, 125, 50, 0.1);
+}
+
+.score-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(245, 247, 250, 0.9) 100%);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(46, 125, 50, 0.1);
+}
+
+.insights-section {
+    background: linear-gradient(135deg, rgba(251, 192, 45, 0.08) 0%, rgba(46, 125, 50, 0.05) 100%);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 24px rgba(251, 192, 45, 0.1);
+}
+
+.detailed-analysis-section {
+    background: linear-gradient(135deg, rgba(126, 87, 194, 0.08) 0%, rgba(30, 136, 229, 0.05) 100%);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 24px rgba(126, 87, 194, 0.1);
+}
+
+.detailed-analysis-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(245, 247, 250, 0.9) 100%);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(126, 87, 194, 0.1);
+}
+
+.action-plan-section {
+    background: linear-gradient(135deg, rgba(30, 136, 229, 0.12) 0%, rgba(126, 87, 194, 0.06) 100%);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 24px rgba(30, 136, 229, 0.15);
+}
+
+.action-plan-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(245, 247, 250, 0.9) 100%);
+    backdrop-filter: blur(10px);
+    border: 3px solid var(--color-primary) !important;
+    box-shadow: 0 8px 32px rgba(30, 136, 229, 0.2);
+}
+
+.recommendations-section {
+    background: linear-gradient(135deg, rgba(251, 140, 0, 0.08) 0%, rgba(251, 192, 45, 0.05) 100%);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 24px rgba(251, 140, 0, 0.1);
+}
+
+/* Enhanced Analysis Section Cards */
+.analysis-section {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(250, 252, 255, 0.95) 100%);
+    border: 2px solid transparent;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.analysis-section:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+    border-color: var(--color-primary);
+}
+
+/* Section-specific border colors */
+.detailed-analysis-section .analysis-section:nth-child(1) {
+    border-left: 4px solid var(--color-primary);
+}
+
+.detailed-analysis-section .analysis-section:nth-child(2) {
+    border-left: 4px solid var(--color-success);
+}
+
+.detailed-analysis-section .analysis-section:nth-child(3) {
+    border-left: 4px solid var(--color-warning);
+}
+
+.detailed-analysis-section .analysis-section:nth-child(4) {
+    border-left: 4px solid var(--color-insight);
+}
+
+.detailed-analysis-section .analysis-section:nth-child(5) {
+    border-left: 4px solid var(--color-cta);
+}
+
+.detailed-analysis-section .analysis-section:nth-child(6) {
+    border-left: 4px solid var(--color-danger);
 }
 </style>
 
