@@ -113,6 +113,18 @@ h1, h2, h3, h4, h5, h6 {
     border-radius: 0 0 var(--border-radius) var(--border-radius);
 }
 
+.card-header {
+    background: rgba(245, 247, 250, 0.95) !important;
+    border-bottom: 1px solid rgba(30, 136, 229, 0.1);
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+}
+
+.card-header .card-title,
+.card-header h6 {
+    color: var(--color-text) !important;
+    font-weight: 600;
+}
+
 .card:hover {
     transform: translateY(-2px);
     box-shadow: 0 16px 40px rgba(30, 136, 229, 0.2), 0 8px 16px rgba(0, 0, 0, 0.1);
