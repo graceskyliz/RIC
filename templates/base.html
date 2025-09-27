@@ -26,7 +26,7 @@
             <a class="navbar-brand d-flex align-items-center" href="{{ url_for('index') }}">
                 <i data-feather="award" class="me-2"></i>
                 <span class="fw-bold">RIC</span>
-                <span class="ms-2 text-light opacity-75" id="ricTextRotator">Coach de Enseñanza IA</span>
+                <span class="ms-2" id="ricTextRotator" style="color: #FBC02D; opacity: 0.85;">Coach de Enseñanza IA</span>
             </a>
             
             <div class="navbar-nav ms-auto">
@@ -100,7 +100,7 @@
                     // Change text and color
                     currentIndex = (currentIndex + 1) % textData.length;
                     textRotator.textContent = textData[currentIndex].text;
-                    textRotator.style.color = textData[currentIndex].color;
+                    textRotator.style.setProperty('color', textData[currentIndex].color, 'important');
                     
                     // Fade in
                     textRotator.style.opacity = '0.85';
