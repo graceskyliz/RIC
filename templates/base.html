@@ -17,6 +17,132 @@
     <!-- Custom CSS -->
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
     
+    <!-- Global Color Palette Override -->
+    <style>
+        /* Force color palette across all pages */
+        body, html {
+            background-color: #2f313e !important;
+            color: #f6b5b7 !important;
+        }
+        
+        /* Override Bootstrap navigation */
+        .navbar-dark.bg-primary {
+            background: linear-gradient(135deg, #424453 0%, #9da0e5 100%) !important;
+        }
+        
+        .navbar-dark .navbar-nav .nav-link {
+            color: #f6b5b7 !important;
+        }
+        
+        .navbar-dark .navbar-nav .nav-link:hover {
+            color: #fbceb1 !important;
+        }
+        
+        .navbar-brand {
+            color: #f6b5b7 !important;
+        }
+        
+        /* Override Bootstrap footer */
+        footer.bg-light {
+            background: #424453 !important;
+            color: #f6b5b7 !important;
+        }
+        
+        footer.bg-light .text-muted {
+            color: #fbceb1 !important;
+        }
+        
+        /* Override Bootstrap alerts */
+        .alert {
+            background-color: #424453 !important;
+            border-color: #9da0e5 !important;
+            color: #f6b5b7 !important;
+        }
+        
+        .alert-success {
+            background-color: rgba(157, 160, 229, 0.2) !important;
+            border-color: #9da0e5 !important;
+            color: #f6b5b7 !important;
+        }
+        
+        .alert-danger {
+            background-color: rgba(246, 181, 183, 0.2) !important;
+            border-color: #f6b5b7 !important;
+            color: #f6b5b7 !important;
+        }
+        
+        .alert-warning {
+            background-color: rgba(251, 206, 177, 0.2) !important;
+            border-color: #fbceb1 !important;
+            color: #f6b5b7 !important;
+        }
+        
+        /* Container override */
+        .container, .container * {
+            color: #f6b5b7 !important;
+        }
+        
+        /* Card overrides */
+        .card {
+            background-color: #424453 !important;
+            border-color: #9da0e5 !important;
+        }
+        
+        .card-header {
+            background-color: #424453 !important;
+            color: #f6b5b7 !important;
+            border-bottom-color: #9da0e5 !important;
+        }
+        
+        .card-body {
+            background-color: #424453 !important;
+            color: #f6b5b7 !important;
+        }
+        
+        /* Form overrides */
+        .form-control {
+            background-color: #2f313e !important;
+            border-color: #9da0e5 !important;
+            color: #f6b5b7 !important;
+        }
+        
+        .form-control:focus {
+            background-color: #2f313e !important;
+            border-color: #fbceb1 !important;
+            color: #f6b5b7 !important;
+            box-shadow: 0 0 0 0.2rem rgba(157, 160, 229, 0.25) !important;
+        }
+        
+        .form-label {
+            color: #f6b5b7 !important;
+        }
+        
+        /* Button overrides */
+        .btn-primary {
+            background-color: #9da0e5 !important;
+            border-color: #9da0e5 !important;
+            color: #2f313e !important;
+        }
+        
+        .btn-primary:hover {
+            background-color: #424453 !important;
+            border-color: #424453 !important;
+            color: #f6b5b7 !important;
+        }
+        
+        .btn-secondary {
+            background-color: #424453 !important;
+            border-color: #424453 !important;
+            color: #f6b5b7 !important;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #fbceb1 !important;
+            border-color: #fbceb1 !important;
+            color: #2f313e !important;
+        }
+    </style>
+    
     {% block head %}{% endblock %}
 </head>
 <body>
@@ -26,7 +152,7 @@
             <a class="navbar-brand d-flex align-items-center" href="{{ url_for('index') }}">
                 <i data-feather="award" class="me-2"></i>
                 <span class="fw-bold">RIC</span>
-                <span class="ms-2" id="ricTextRotator" style="color: #9ca3af; opacity: 0.95;">Coach de Enseñanza IA</span>
+                <span class="ms-2" id="ricTextRotator" style="color: #fbceb1; opacity: 0.95;">Coach de Enseñanza IA</span>
             </a>
             
             <div class="navbar-nav ms-auto">
@@ -89,8 +215,8 @@
         document.addEventListener('DOMContentLoaded', function() {
             const textRotator = document.getElementById('ricTextRotator');
             const textData = [
-                { text: 'Coach de Enseñanza IA', color: '#9ca3af' }, // Gris claro
-                { text: 'Rápido Innovador y Contínuo.', color: '#9ca3af' } // Gris claro
+                { text: 'Coach de Enseñanza IA', color: '#fbceb1' }, // Peach accent
+                { text: 'Rápido Innovador y Contínuo.', color: '#fbceb1' } // Peach accent
             ];
             let currentIndex = 0;
             
