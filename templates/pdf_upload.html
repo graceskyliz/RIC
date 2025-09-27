@@ -1,0 +1,299 @@
+{% extends "base.html" %}
+
+{% block title %}RIC - Análisis de Planeación{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Inicio</a></li>
+            <li class="breadcrumb-item active">Análisis de Planeación</li>
+        </ol>
+    </nav>
+
+    <!-- Header -->
+    <div class="row align-items-center mb-5">
+        <div class="col-lg-8">
+            <h1 class="display-5 fw-bold text-primary mb-3">
+                <i data-feather="file-text" class="me-3"></i>
+                Análisis de Planeación de Clase
+            </h1>
+            <p class="lead text-muted mb-4">
+                Sube tu planeación de clase en PDF para obtener retroalimentación pedagógica sobre objetivos de aprendizaje, 
+                diseño de actividades, estrategias de evaluación y más.
+            </p>
+        </div>
+        <div class="col-lg-4 text-end">
+            <a href="{{ url_for('upload_audio_page') }}" class="btn btn-outline-primary">
+                <i data-feather="volume-2" class="me-2"></i>
+                Analizar Audio de Clase
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Upload Form -->
+        <div class="col-lg-8">
+            <div class="card shadow-lg">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="card-title mb-0">
+                        <i data-feather="file-text" class="me-2"></i>
+                        Subir Planeación PDF
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data" id="pdfUploadForm">
+                        <!-- Educational Context -->
+                        <div class="educational-context mb-4">
+                            <h6 class="text-muted mb-3">
+                                <i data-feather="info" class="me-2"></i>
+                                Contexto Educativo
+                            </h6>
+                            
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="subject" class="form-label">Materia/Asignatura</label>
+                                    <select class="form-select" id="subject" name="subject" required>
+                                        <option value="">Selecciona una materia</option>
+                                        <option value="Matemáticas">Matemáticas</option>
+                                        <option value="Español">Español / Lenguaje</option>
+                                        <option value="Ciencias Naturales">Ciencias Naturales</option>
+                                        <option value="Ciencias Sociales">Ciencias Sociales / Historia</option>
+                                        <option value="Inglés">Inglés</option>
+                                        <option value="Educación Física">Educación Física</option>
+                                        <option value="Arte">Arte / Educación Artística</option>
+                                        <option value="Tecnología">Tecnología</option>
+                                        <option value="Física">Física</option>
+                                        <option value="Química">Química</option>
+                                        <option value="Biología">Biología</option>
+                                        <option value="Otro">Otra materia</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="grade_level" class="form-label">Grado Escolar</label>
+                                    <select class="form-select" id="grade_level" name="grade_level" required>
+                                        <option value="">Selecciona el grado</option>
+                                        <option value="Preescolar">Preescolar</option>
+                                        <option value="1° Primaria">1° Primaria</option>
+                                        <option value="2° Primaria">2° Primaria</option>
+                                        <option value="3° Primaria">3° Primaria</option>
+                                        <option value="4° Primaria">4° Primaria</option>
+                                        <option value="5° Primaria">5° Primaria</option>
+                                        <option value="6° Primaria">6° Primaria</option>
+                                        <option value="1° Secundaria">1° Secundaria</option>
+                                        <option value="2° Secundaria">2° Secundaria</option>
+                                        <option value="3° Secundaria">3° Secundaria</option>
+                                        <option value="1° Preparatoria">1° Preparatoria</option>
+                                        <option value="2° Preparatoria">2° Preparatoria</option>
+                                        <option value="3° Preparatoria">3° Preparatoria</option>
+                                        <option value="Universidad">Universidad</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="row g-3 mt-2">
+                                <div class="col-12">
+                                    <label for="lesson_topic" class="form-label">Tema de la Clase</label>
+                                    <input type="text" class="form-control" id="lesson_topic" name="lesson_topic" 
+                                           placeholder="Ej: Fracciones, La Revolución Mexicana, Ecosistemas, etc." required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PDF-specific Context -->
+                        <div class="lesson-planning-context mb-4">
+                            <h6 class="text-muted mb-3">
+                                <i data-feather="calendar" class="me-2"></i>
+                                Información de la Planeación
+                            </h6>
+                            
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="lesson_duration" class="form-label">Duración de la Clase (minutos)</label>
+                                    <input type="number" class="form-control" id="lesson_duration" name="lesson_duration" 
+                                           placeholder="Ej: 60" min="1" max="300">
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="student_count" class="form-label">Número de Estudiantes</label>
+                                    <input type="number" class="form-control" id="student_count" name="student_count" 
+                                           placeholder="Ej: 25" min="1" max="100">
+                                </div>
+                            </div>
+                            
+                            <div class="row g-3 mt-2">
+                                <div class="col-12">
+                                    <label for="learning_objectives" class="form-label">Objetivos de Aprendizaje (Opcional)</label>
+                                    <textarea class="form-control" id="learning_objectives" name="learning_objectives" rows="3" 
+                                              placeholder="Si no están claramente definidos en tu PDF, puedes escribirlos aquí para un análisis más preciso..."></textarea>
+                                </div>
+                            </div>
+                            
+                            <div class="row g-3 mt-2">
+                                <div class="col-12">
+                                    <label for="additional_context" class="form-label">Contexto Adicional (Opcional)</label>
+                                    <textarea class="form-control" id="additional_context" name="additional_context" rows="2" 
+                                              placeholder="Información adicional sobre la planeación: enfoque pedagógico, recursos especiales, adaptaciones, etc."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- PDF Upload -->
+                        <div class="upload-section">
+                            <h6 class="text-muted mb-3">
+                                <i data-feather="upload" class="me-2"></i>
+                                Archivo de Planeación
+                            </h6>
+                            
+                            <!-- File Upload Area -->
+                            <div class="upload-area mb-3" id="pdfUploadArea">
+                                <input type="file" id="pdfFile" name="pdf_file" accept=".pdf" style="display: none;">
+                                <i data-feather="file-text" class="upload-icon mb-3"></i>
+                                <h6>Arrastra tu archivo PDF aquí</h6>
+                                <p class="text-muted mb-3">o haz clic para seleccionar</p>
+                                <div class="upload-info">
+                                    <small class="text-muted">
+                                        Formato soportado: PDF<br>
+                                        Tamaño máximo: 100 MB
+                                    </small>
+                                </div>
+                            </div>
+                            
+                            <!-- File Selected Display -->
+                            <div class="file-selected d-none" id="pdfFileSelected">
+                                <div class="selected-file-info p-3 bg-light rounded">
+                                    <i data-feather="file-text" class="me-2 text-warning"></i>
+                                    <span id="pdfFileName"></span>
+                                    <button type="button" class="btn btn-sm btn-outline-danger ms-2" id="removePdfFileBtn">
+                                        <i data-feather="x"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- PDF Analysis Information -->
+                            <div class="alert alert-info mt-3">
+                                <h6 class="alert-heading">
+                                    <i data-feather="info" class="me-2"></i>
+                                    ¿Qué analizamos en tu planeación?
+                                </h6>
+                                <ul class="mb-0 small">
+                                    <li><strong>Objetivos de Aprendizaje:</strong> Claridad, medibilidad y alineación con el grado</li>
+                                    <li><strong>Diseño de Actividades:</strong> Variedad, secuencia y engagement estudiantil</li>
+                                    <li><strong>Estrategias de Evaluación:</strong> Métodos formativos y sumativos</li>
+                                    <li><strong>Diferenciación:</strong> Adaptaciones para diferentes estilos de aprendizaje</li>
+                                    <li><strong>Gestión del Tiempo:</strong> Distribución realista de las actividades</li>
+                                    <li><strong>Recursos Educativos:</strong> Materiales y herramientas planificadas</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-warning btn-lg" id="pdfSubmitBtn" disabled>
+                                <i data-feather="send" class="me-2"></i>
+                                Iniciar Análisis Pedagógico
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recent PDF Analyses -->
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="card-title mb-0">
+                        <i data-feather="clock" class="me-2"></i>
+                        Análisis de Planeación Recientes
+                    </h6>
+                </div>
+                <div class="card-body">
+                    {% if recent_analyses %}
+                        {% for analysis in recent_analyses %}
+                        <div class="analysis-item mb-3">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1">{{ analysis.lesson_topic or 'Planeación sin título' }}</h6>
+                                    <p class="text-muted small mb-1">
+                                        <span class="subject-badge subject-{{ analysis.subject|lower|replace(' ', '-')|replace('/', '-') }}">
+                                            {{ analysis.subject or 'General' }}
+                                        </span>
+                                        {{ analysis.grade_level }}
+                                    </p>
+                                    <p class="text-muted small">{{ analysis.upload_timestamp.strftime('%d/%m/%Y %H:%M') }}</p>
+                                </div>
+                                <a href="{{ url_for('analyze', analysis_id=analysis.id) }}" class="btn btn-sm btn-outline-warning">
+                                    Ver
+                                </a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-muted text-center">No hay análisis de planeación recientes.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const pdfFile = document.getElementById('pdfFile');
+    const uploadArea = document.getElementById('pdfUploadArea');
+    const fileSelected = document.getElementById('pdfFileSelected');
+    const fileName = document.getElementById('pdfFileName');
+    const removeBtn = document.getElementById('removePdfFileBtn');
+    const submitBtn = document.getElementById('pdfSubmitBtn');
+
+    // File upload area click
+    uploadArea.addEventListener('click', () => pdfFile.click());
+
+    // Drag and drop
+    uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.classList.add('dragover');
+    });
+
+    uploadArea.addEventListener('dragleave', () => {
+        uploadArea.classList.remove('dragover');
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+        const files = e.dataTransfer.files;
+        if (files.length > 0 && files[0].type === 'application/pdf') {
+            pdfFile.files = files;
+            handleFileSelected();
+        }
+    });
+
+    // File input change
+    pdfFile.addEventListener('change', handleFileSelected);
+
+    // Remove file button
+    removeBtn.addEventListener('click', () => {
+        pdfFile.value = '';
+        uploadArea.classList.remove('d-none');
+        fileSelected.classList.add('d-none');
+        submitBtn.disabled = true;
+    });
+
+    function handleFileSelected() {
+        if (pdfFile.files.length > 0) {
+            const file = pdfFile.files[0];
+            fileName.textContent = file.name;
+            uploadArea.classList.add('d-none');
+            fileSelected.classList.remove('d-none');
+            submitBtn.disabled = false;
+        }
+    }
+
+    // Initialize feather icons
+    feather.replace();
+});
+</script>
+{% endblock %}

@@ -1,0 +1,555 @@
+{% extends "base.html" %}
+
+{% block title %}RIC - Análisis de Planeación{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Inicio</a></li>
+            <li class="breadcrumb-item"><a href="{{ url_for('upload_pdf_page') }}">Análisis de Planeación</a></li>
+            <li class="breadcrumb-item active">Resultados</li>
+        </ol>
+    </nav>
+
+    <!-- Analysis Header -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1 class="display-6 fw-bold text-primary mb-2">
+                <i data-feather="file-text" class="me-3"></i>
+                Análisis Pedagógico
+            </h1>
+            <div class="lesson-info">
+                <h3 class="lesson-topic">{{ analysis.lesson_topic or 'Planeación de Clase' }}</h3>
+                <div class="d-flex flex-wrap gap-2 mb-3">
+                    <span class="subject-badge subject-{{ analysis.subject|lower|replace(' ', '-')|replace('/', '-') }}">
+                        {{ analysis.subject or 'General' }}
+                    </span>
+                    <span class="badge bg-secondary">{{ analysis.grade_level or 'Grado no especificado' }}</span>
+                    {% if analysis.lesson_duration %}
+                    <span class="badge bg-info">{{ analysis.lesson_duration }} min</span>
+                    {% endif %}
+                    {% if analysis.student_count %}
+                    <span class="badge bg-success">{{ analysis.student_count }} estudiantes</span>
+                    {% endif %}
+                </div>
+                <p class="text-muted small">
+                    <i data-feather="calendar" class="me-1"></i>
+                    Analizado el {{ analysis.analysis_timestamp.strftime('%d de %B, %Y a las %H:%M') if analysis.analysis_timestamp else analysis.upload_timestamp.strftime('%d de %B, %Y a las %H:%M') }}
+                </p>
+            </div>
+        </div>
+        <div class="col-md-4 text-end">
+            <div class="status-indicator">
+                {% if analysis.status == 'completed' %}
+                    <span class="badge bg-success fs-6">
+                        <i data-feather="check-circle" class="me-1"></i>
+                        Análisis Completado
+                    </span>
+                {% elif analysis.status == 'processing' %}
+                    <span class="badge bg-warning fs-6">
+                        <i data-feather="clock" class="me-1"></i>
+                        Procesando...
+                    </span>
+                {% elif analysis.status == 'error' %}
+                    <span class="badge bg-danger fs-6">
+                        <i data-feather="alert-circle" class="me-1"></i>
+                        Error en Análisis
+                    </span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Analysis Results -->
+    {% if analysis.status == 'completed' %}
+        {% set feedback = analysis.get_ric_feedback() %}
+        {% set structure = analysis.get_lesson_plan_structure() %}
+        
+        <!-- Overall Score -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="score-circle-container">
+                            <div class="score-circle mx-auto mb-3" data-score="{{ feedback.overall_score or 0 }}">
+                                <span class="score-number">{{ feedback.overall_score or 0 }}</span>
+                                <span class="score-total">/100</span>
+                            </div>
+                        </div>
+                        <h4 class="mb-2">Puntuación Pedagógica General</h4>
+                        <p class="text-muted mb-0">{{ feedback.summary or 'Análisis completado' }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Insights -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-header bg-success text-white">
+                        <h6 class="mb-0">
+                            <i data-feather="thumbs-up" class="me-2"></i>
+                            Fortalezas Principales
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        {% if feedback.strengths %}
+                            <ul class="list-unstyled mb-0">
+                                {% for strength in feedback.strengths %}
+                                <li class="mb-2">
+                                    <i data-feather="check" class="me-2 text-success"></i>
+                                    {{ strength }}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p class="text-muted">No se identificaron fortalezas específicas.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-header bg-warning text-dark">
+                        <h6 class="mb-0">
+                            <i data-feather="trending-up" class="me-2"></i>
+                            Áreas de Mejora
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        {% if feedback.areas_for_improvement %}
+                            <ul class="list-unstyled mb-0">
+                                {% for improvement in feedback.areas_for_improvement %}
+                                <li class="mb-2">
+                                    <i data-feather="arrow-right" class="me-2 text-warning"></i>
+                                    {{ improvement }}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p class="text-muted">No se identificaron áreas específicas de mejora.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detailed Analysis -->
+        {% if feedback.detailed_analysis %}
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i data-feather="bar-chart-2" class="me-2"></i>
+                            Análisis Detallado por Áreas
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-4">
+                            <!-- Learning Objectives -->
+                            {% if feedback.detailed_analysis.learning_objectives %}
+                            <div class="col-lg-6">
+                                <div class="analysis-section">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h6 class="text-primary">
+                                            <i data-feather="target" class="me-2"></i>
+                                            Objetivos de Aprendizaje
+                                        </h6>
+                                        <span class="badge bg-primary">{{ feedback.detailed_analysis.learning_objectives.score or 0 }}/100</span>
+                                    </div>
+                                    <p class="mb-3">{{ feedback.detailed_analysis.learning_objectives.feedback or 'Sin retroalimentación disponible' }}</p>
+                                    {% if feedback.detailed_analysis.learning_objectives.recommendations %}
+                                    <div class="recommendations">
+                                        <strong>Recomendaciones:</strong>
+                                        <ul class="small mt-2">
+                                            {% for rec in feedback.detailed_analysis.learning_objectives.recommendations %}
+                                            <li>{{ rec }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            <!-- Activity Design -->
+                            {% if feedback.detailed_analysis.activity_design %}
+                            <div class="col-lg-6">
+                                <div class="analysis-section">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h6 class="text-success">
+                                            <i data-feather="layers" class="me-2"></i>
+                                            Diseño de Actividades
+                                        </h6>
+                                        <span class="badge bg-success">{{ feedback.detailed_analysis.activity_design.score or 0 }}/100</span>
+                                    </div>
+                                    <p class="mb-3">{{ feedback.detailed_analysis.activity_design.feedback or 'Sin retroalimentación disponible' }}</p>
+                                    {% if feedback.detailed_analysis.activity_design.recommendations %}
+                                    <div class="recommendations">
+                                        <strong>Recomendaciones:</strong>
+                                        <ul class="small mt-2">
+                                            {% for rec in feedback.detailed_analysis.activity_design.recommendations %}
+                                            <li>{{ rec }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            <!-- Assessment Strategy -->
+                            {% if feedback.detailed_analysis.assessment_strategy %}
+                            <div class="col-lg-6">
+                                <div class="analysis-section">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h6 class="text-warning">
+                                            <i data-feather="check-square" class="me-2"></i>
+                                            Estrategia de Evaluación
+                                        </h6>
+                                        <span class="badge bg-warning">{{ feedback.detailed_analysis.assessment_strategy.score or 0 }}/100</span>
+                                    </div>
+                                    <p class="mb-3">{{ feedback.detailed_analysis.assessment_strategy.feedback or 'Sin retroalimentación disponible' }}</p>
+                                    {% if feedback.detailed_analysis.assessment_strategy.recommendations %}
+                                    <div class="recommendations">
+                                        <strong>Recomendaciones:</strong>
+                                        <ul class="small mt-2">
+                                            {% for rec in feedback.detailed_analysis.assessment_strategy.recommendations %}
+                                            <li>{{ rec }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            <!-- Differentiation -->
+                            {% if feedback.detailed_analysis.differentiation %}
+                            <div class="col-lg-6">
+                                <div class="analysis-section">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h6 class="text-info">
+                                            <i data-feather="users" class="me-2"></i>
+                                            Diferenciación
+                                        </h6>
+                                        <span class="badge bg-info">{{ feedback.detailed_analysis.differentiation.score or 0 }}/100</span>
+                                    </div>
+                                    <p class="mb-3">{{ feedback.detailed_analysis.differentiation.feedback or 'Sin retroalimentación disponible' }}</p>
+                                    {% if feedback.detailed_analysis.differentiation.recommendations %}
+                                    <div class="recommendations">
+                                        <strong>Recomendaciones:</strong>
+                                        <ul class="small mt-2">
+                                            {% for rec in feedback.detailed_analysis.differentiation.recommendations %}
+                                            <li>{{ rec }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            <!-- Time Management -->
+                            {% if feedback.detailed_analysis.time_management %}
+                            <div class="col-lg-6">
+                                <div class="analysis-section">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h6 class="text-secondary">
+                                            <i data-feather="clock" class="me-2"></i>
+                                            Gestión del Tiempo
+                                        </h6>
+                                        <span class="badge bg-secondary">{{ feedback.detailed_analysis.time_management.score or 0 }}/100</span>
+                                    </div>
+                                    <p class="mb-3">{{ feedback.detailed_analysis.time_management.feedback or 'Sin retroalimentación disponible' }}</p>
+                                    {% if feedback.detailed_analysis.time_management.recommendations %}
+                                    <div class="recommendations">
+                                        <strong>Recomendaciones:</strong>
+                                        <ul class="small mt-2">
+                                            {% for rec in feedback.detailed_analysis.time_management.recommendations %}
+                                            <li>{{ rec }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            <!-- Resource Utilization -->
+                            {% if feedback.detailed_analysis.resource_utilization %}
+                            <div class="col-lg-6">
+                                <div class="analysis-section">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h6 class="text-dark">
+                                            <i data-feather="book" class="me-2"></i>
+                                            Utilización de Recursos
+                                        </h6>
+                                        <span class="badge bg-dark">{{ feedback.detailed_analysis.resource_utilization.score or 0 }}/100</span>
+                                    </div>
+                                    <p class="mb-3">{{ feedback.detailed_analysis.resource_utilization.feedback or 'Sin retroalimentación disponible' }}</p>
+                                    {% if feedback.detailed_analysis.resource_utilization.recommendations %}
+                                    <div class="recommendations">
+                                        <strong>Recomendaciones:</strong>
+                                        <ul class="small mt-2">
+                                            {% for rec in feedback.detailed_analysis.resource_utilization.recommendations %}
+                                            <li>{{ rec }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Action Plan -->
+        {% if feedback.action_plan %}
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card border-primary">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">
+                            <i data-feather="list" class="me-2"></i>
+                            Plan de Acción Recomendado
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <ol class="action-plan-list">
+                            {% for action in feedback.action_plan %}
+                            <li class="mb-2">{{ action }}</li>
+                            {% endfor %}
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Grade-specific Recommendations and Resources -->
+        <div class="row mb-4">
+            {% if feedback.grade_specific_recommendations %}
+            <div class="col-lg-6">
+                <div class="card h-100">
+                    <div class="card-header bg-info text-white">
+                        <h6 class="mb-0">
+                            <i data-feather="graduation-cap" class="me-2"></i>
+                            Recomendaciones para {{ analysis.grade_level }}
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled mb-0">
+                            {% for rec in feedback.grade_specific_recommendations %}
+                            <li class="mb-2">
+                                <i data-feather="arrow-right" class="me-2 text-info"></i>
+                                {{ rec }}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if feedback.resource_suggestions %}
+            <div class="col-lg-6">
+                <div class="card h-100">
+                    <div class="card-header bg-purple text-white">
+                        <h6 class="mb-0">
+                            <i data-feather="bookmark" class="me-2"></i>
+                            Recursos Sugeridos
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled mb-0">
+                            {% for resource in feedback.resource_suggestions %}
+                            <li class="mb-2">
+                                <i data-feather="link" class="me-2 text-purple"></i>
+                                {{ resource }}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Bloom's Taxonomy Analysis -->
+        {% if feedback.bloom_taxonomy_analysis %}
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="mb-0">
+                            <i data-feather="triangle" class="me-2"></i>
+                            Análisis de Taxonomía de Bloom
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        {% if feedback.bloom_taxonomy_analysis.cognitive_levels_present %}
+                        <div class="mb-3">
+                            <strong>Niveles Cognitivos Identificados:</strong>
+                            <div class="d-flex flex-wrap gap-2 mt-2">
+                                {% for level in feedback.bloom_taxonomy_analysis.cognitive_levels_present %}
+                                <span class="badge bg-light text-dark">{{ level }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if feedback.bloom_taxonomy_analysis.suggested_improvements %}
+                        <div>
+                            <strong>Sugerencias de Mejora:</strong>
+                            <ul class="mt-2">
+                                {% for suggestion in feedback.bloom_taxonomy_analysis.suggested_improvements %}
+                                <li>{{ suggestion }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+    {% elif analysis.status == 'processing' %}
+        <!-- Processing State -->
+        <div class="text-center py-5">
+            <div class="spinner-border text-primary mb-3" role="status"></div>
+            <h4>Analizando tu planeación...</h4>
+            <p class="text-muted">Esto puede tomar unos minutos. La página se actualizará automáticamente.</p>
+        </div>
+
+    {% elif analysis.status == 'error' %}
+        <!-- Error State -->
+        <div class="alert alert-danger text-center">
+            <i data-feather="alert-circle" class="me-2"></i>
+            <strong>Error en el análisis:</strong> {{ analysis.error_message or 'Error desconocido' }}
+            <br><br>
+            <a href="{{ url_for('upload_pdf_page') }}" class="btn btn-warning">
+                <i data-feather="upload" class="me-2"></i>
+                Intentar de Nuevo
+            </a>
+        </div>
+    {% endif %}
+
+    <!-- Actions -->
+    <div class="row">
+        <div class="col-12 text-center">
+            <a href="{{ url_for('upload_pdf_page') }}" class="btn btn-warning me-2">
+                <i data-feather="file-text" class="me-2"></i>
+                Analizar Otra Planeación
+            </a>
+            <a href="{{ url_for('upload_audio_page') }}" class="btn btn-primary me-2">
+                <i data-feather="volume-2" class="me-2"></i>
+                Analizar Audio de Clase
+            </a>
+            <a href="{{ url_for('history') }}" class="btn btn-outline-secondary">
+                <i data-feather="clock" class="me-2"></i>
+                Ver Historial
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+.score-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: conic-gradient(
+        var(--primary-color) calc(var(--score) * 3.6deg),
+        var(--light-gray) 0deg
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.score-circle::before {
+    content: '';
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: white;
+    position: absolute;
+}
+
+.score-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    z-index: 1;
+}
+
+.score-total {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    z-index: 1;
+}
+
+.analysis-section {
+    padding: 1.5rem;
+    border: 1px solid var(--medium-gray);
+    border-radius: var(--border-radius);
+    height: 100%;
+}
+
+.recommendations {
+    background: var(--light-gray);
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid var(--primary-color);
+}
+
+.action-plan-list {
+    padding-left: 1.2rem;
+}
+
+.action-plan-list li {
+    margin-bottom: 0.8rem;
+    font-weight: 500;
+}
+
+.bg-purple {
+    background-color: var(--accent-color) !important;
+}
+
+.text-purple {
+    color: var(--accent-color) !important;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Set score circle progress
+    const scoreCircles = document.querySelectorAll('.score-circle');
+    scoreCircles.forEach(circle => {
+        const score = circle.dataset.score;
+        circle.style.setProperty('--score', score);
+    });
+
+    // Auto-refresh if processing
+    {% if analysis.status == 'processing' %}
+    setTimeout(() => {
+        location.reload();
+    }, 5000);
+    {% endif %}
+
+    // Initialize feather icons
+    feather.replace();
+});
+</script>
+{% endblock %}

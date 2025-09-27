@@ -1,0 +1,254 @@
+{% extends "base.html" %}
+
+{% block title %}RIC - Análisis de Audio{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Inicio</a></li>
+            <li class="breadcrumb-item active">Análisis de Audio</li>
+        </ol>
+    </nav>
+
+    <!-- Header -->
+    <div class="row align-items-center mb-5">
+        <div class="col-lg-8">
+            <h1 class="display-5 fw-bold text-primary mb-3">
+                <i data-feather="volume-2" class="me-3"></i>
+                Análisis de Audio de Clase
+            </h1>
+            <p class="lead text-muted mb-4">
+                Sube o graba el audio de tu clase para obtener retroalimentación sobre tu técnica de enseñanza, 
+                velocidad de habla, claridad y engagement con los estudiantes.
+            </p>
+        </div>
+        <div class="col-lg-4 text-end">
+            <a href="{{ url_for('upload_pdf_page') }}" class="btn btn-outline-warning">
+                <i data-feather="file-text" class="me-2"></i>
+                Analizar Planeación PDF
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Upload Form -->
+        <div class="col-lg-8">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">
+                        <i data-feather="mic" class="me-2"></i>
+                        Subir Audio de Clase
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data" id="audioUploadForm">
+                        <!-- Educational Context -->
+                        <div class="educational-context mb-4">
+                            <h6 class="text-muted mb-3">
+                                <i data-feather="info" class="me-2"></i>
+                                Contexto Educativo
+                            </h6>
+                            
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="subject" class="form-label">Materia/Asignatura</label>
+                                    <select class="form-select" id="subject" name="subject" required>
+                                        <option value="">Selecciona una materia</option>
+                                        <option value="Matemáticas">Matemáticas</option>
+                                        <option value="Español">Español / Lenguaje</option>
+                                        <option value="Ciencias Naturales">Ciencias Naturales</option>
+                                        <option value="Ciencias Sociales">Ciencias Sociales / Historia</option>
+                                        <option value="Inglés">Inglés</option>
+                                        <option value="Educación Física">Educación Física</option>
+                                        <option value="Arte">Arte / Educación Artística</option>
+                                        <option value="Tecnología">Tecnología</option>
+                                        <option value="Física">Física</option>
+                                        <option value="Química">Química</option>
+                                        <option value="Biología">Biología</option>
+                                        <option value="Otro">Otra materia</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="grade_level" class="form-label">Grado Escolar</label>
+                                    <select class="form-select" id="grade_level" name="grade_level" required>
+                                        <option value="">Selecciona el grado</option>
+                                        <option value="Preescolar">Preescolar</option>
+                                        <option value="1° Primaria">1° Primaria</option>
+                                        <option value="2° Primaria">2° Primaria</option>
+                                        <option value="3° Primaria">3° Primaria</option>
+                                        <option value="4° Primaria">4° Primaria</option>
+                                        <option value="5° Primaria">5° Primaria</option>
+                                        <option value="6° Primaria">6° Primaria</option>
+                                        <option value="1° Secundaria">1° Secundaria</option>
+                                        <option value="2° Secundaria">2° Secundaria</option>
+                                        <option value="3° Secundaria">3° Secundaria</option>
+                                        <option value="1° Preparatoria">1° Preparatoria</option>
+                                        <option value="2° Preparatoria">2° Preparatoria</option>
+                                        <option value="3° Preparatoria">3° Preparatoria</option>
+                                        <option value="Universidad">Universidad</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="row g-3 mt-2">
+                                <div class="col-12">
+                                    <label for="lesson_topic" class="form-label">Tema de la Clase</label>
+                                    <input type="text" class="form-control" id="lesson_topic" name="lesson_topic" 
+                                           placeholder="Ej: Fracciones, La Revolución Mexicana, Ecosistemas, etc." required>
+                                </div>
+                            </div>
+                            
+                            <div class="row g-3 mt-2">
+                                <div class="col-12">
+                                    <label for="additional_context" class="form-label">Contexto Adicional (Opcional)</label>
+                                    <textarea class="form-control" id="additional_context" name="additional_context" rows="2" 
+                                              placeholder="Información adicional: tipo de actividad, dificultades esperadas, objetivos específicos, etc."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Audio Upload -->
+                        <div class="upload-section">
+                            <h6 class="text-muted mb-3">
+                                <i data-feather="upload" class="me-2"></i>
+                                Audio de la Clase
+                            </h6>
+                            
+                            <!-- Recording/Upload Options -->
+                            <div class="audio-options mb-3">
+                                <div class="btn-group w-100" role="group">
+                                    <button type="button" class="btn btn-outline-primary" id="recordBtn">
+                                        <i data-feather="mic" class="me-2"></i>
+                                        Grabar Audio
+                                    </button>
+                                    <button type="button" class="btn btn-outline-secondary" id="uploadBtn" onclick="document.getElementById('audioFile').click()">
+                                        <i data-feather="upload" class="me-2"></i>
+                                        Subir Archivo
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- File Upload Area -->
+                            <div class="upload-area mb-3" id="uploadArea">
+                                <input type="file" id="audioFile" name="audio_file" accept=".mp3,.wav,.m4a,.ogg,.flac" style="display: none;">
+                                <i data-feather="upload-cloud" class="upload-icon mb-3"></i>
+                                <h6>Arrastra tu archivo de audio aquí</h6>
+                                <p class="text-muted mb-3">o haz clic para seleccionar</p>
+                                <div class="upload-info">
+                                    <small class="text-muted">
+                                        Formatos soportados: MP3, WAV, M4A, OGG, FLAC<br>
+                                        Tamaño máximo: 100 MB
+                                    </small>
+                                </div>
+                            </div>
+                            
+                            <!-- Recording Interface -->
+                            <div class="recording-interface d-none" id="recordingInterface">
+                                <div class="recording-controls text-center p-4">
+                                    <div class="recording-status mb-3">
+                                        <span class="recording-indicator"></span>
+                                        <span id="recordingStatus">Presiona para comenzar a grabar</span>
+                                    </div>
+                                    <div class="recording-timer mb-3">
+                                        <span id="recordingTimer">00:00</span>
+                                    </div>
+                                    <div class="recording-buttons">
+                                        <button type="button" class="btn btn-success me-2" id="startRecordBtn">
+                                            <i data-feather="play" class="me-2"></i>
+                                            Iniciar
+                                        </button>
+                                        <button type="button" class="btn btn-danger me-2 d-none" id="stopRecordBtn">
+                                            <i data-feather="square" class="me-2"></i>
+                                            Detener
+                                        </button>
+                                        <button type="button" class="btn btn-secondary" id="cancelRecordBtn">
+                                            <i data-feather="x" class="me-2"></i>
+                                            Cancelar
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Audio Preview -->
+                                <div class="audio-preview d-none" id="audioPreview">
+                                    <audio controls class="w-100 mb-3"></audio>
+                                    <div class="preview-actions text-center">
+                                        <button type="button" class="btn btn-outline-primary me-2" id="reRecordBtn">
+                                            <i data-feather="refresh-cw" class="me-2"></i>
+                                            Grabar de Nuevo
+                                        </button>
+                                        <button type="button" class="btn btn-primary" id="useRecordingBtn">
+                                            <i data-feather="check" class="me-2"></i>
+                                            Usar esta Grabación
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- File Selected Display -->
+                            <div class="file-selected d-none" id="fileSelected">
+                                <div class="selected-file-info p-3 bg-light rounded">
+                                    <i data-feather="file" class="me-2"></i>
+                                    <span id="fileName"></span>
+                                    <button type="button" class="btn btn-sm btn-outline-danger ms-2" id="removeFileBtn">
+                                        <i data-feather="x"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary btn-lg" id="submitBtn" disabled>
+                                <i data-feather="send" class="me-2"></i>
+                                Iniciar Análisis de Audio
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recent Audio Analyses -->
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="card-title mb-0">
+                        <i data-feather="clock" class="me-2"></i>
+                        Análisis de Audio Recientes
+                    </h6>
+                </div>
+                <div class="card-body">
+                    {% if recent_analyses %}
+                        {% for analysis in recent_analyses %}
+                        <div class="analysis-item mb-3">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1">{{ analysis.lesson_topic or 'Análisis sin título' }}</h6>
+                                    <p class="text-muted small mb-1">
+                                        <span class="subject-badge subject-{{ analysis.subject|lower|replace(' ', '-')|replace('/', '-') }}">
+                                            {{ analysis.subject or 'General' }}
+                                        </span>
+                                        {{ analysis.grade_level }}
+                                    </p>
+                                    <p class="text-muted small">{{ analysis.upload_timestamp.strftime('%d/%m/%Y %H:%M') }}</p>
+                                </div>
+                                <a href="{{ url_for('analyze', analysis_id=analysis.id) }}" class="btn btn-sm btn-outline-primary">
+                                    Ver
+                                </a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-muted text-center">No hay análisis de audio recientes.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include the audio upload JavaScript -->
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+{% endblock %}
