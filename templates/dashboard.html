@@ -4,85 +4,114 @@
 
 {% block head %}
 <style>
+    body {
+        background-color: #2f313e !important;
+        color: #f6b5b7 !important;
+    }
+    
+    .container {
+        color: #f6b5b7;
+    }
+    
     .stat-card {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
+        background: linear-gradient(135deg, #424453 0%, #9da0e5 100%);
+        color: #f6b5b7;
         border-radius: 15px;
         padding: 1.5rem;
         text-align: center;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
         transition: transform 0.3s ease;
+        border: 1px solid rgba(157, 160, 229, 0.2);
     }
     
     .stat-card:hover {
         transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(157, 160, 229, 0.2);
     }
     
     .stat-number {
         font-size: 2.5rem;
         font-weight: bold;
         margin-bottom: 0.5rem;
+        color: #fbceb1;
     }
     
     .stat-label {
         font-size: 0.9rem;
         opacity: 0.9;
+        color: #f6b5b7;
     }
     
     .chart-container {
-        background: rgba(255, 255, 255, 0.95);
+        background: rgba(66, 68, 83, 0.8);
         backdrop-filter: blur(10px);
         border-radius: 15px;
         padding: 1.5rem;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(157, 160, 229, 0.2);
         margin-bottom: 2rem;
     }
     
     .chart-title {
-        color: #1f2937;
+        color: #f6b5b7;
         font-weight: 600;
         margin-bottom: 1rem;
         font-size: 1.1rem;
     }
     
     .progress-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
+        background: linear-gradient(135deg, #424453 0%, #9da0e5 100%);
+        color: #f6b5b7;
         padding: 3rem 0;
         margin-bottom: 3rem;
         border-radius: 0 0 25px 25px;
+    }
+    
+    .progress-header h1 {
+        color: #fbceb1;
+    }
+    
+    .progress-header .lead {
+        color: #f6b5b7;
+        opacity: 0.9;
     }
     
     .loading-spinner {
         display: none;
         text-align: center;
         padding: 2rem;
+        color: #f6b5b7;
     }
     
     .loading-spinner.show {
         display: block;
     }
     
+    .spinner-border {
+        color: #9da0e5 !important;
+    }
+    
     .recent-item {
-        background: rgba(255, 255, 255, 0.8);
+        background: rgba(66, 68, 83, 0.6);
         border-radius: 10px;
         padding: 1rem;
         margin-bottom: 0.5rem;
         border-left: 4px solid;
         transition: transform 0.2s ease;
+        color: #f6b5b7;
     }
     
     .recent-item:hover {
         transform: translateX(5px);
+        background: rgba(66, 68, 83, 0.8);
     }
     
     .recent-item.audio {
-        border-left-color: #3b82f6;
+        border-left-color: #9da0e5;
     }
     
     .recent-item.pdf {
-        border-left-color: #ef4444;
+        border-left-color: #fbceb1;
     }
     
     .status-badge {
@@ -93,23 +122,27 @@
     }
     
     .status-completed {
-        background: #d1fae5;
-        color: #065f46;
+        background: rgba(157, 160, 229, 0.2);
+        color: #9da0e5;
+        border: 1px solid #9da0e5;
     }
     
     .status-processing {
-        background: #fef3c7;
-        color: #92400e;
+        background: rgba(251, 206, 177, 0.2);
+        color: #fbceb1;
+        border: 1px solid #fbceb1;
     }
     
     .status-error {
-        background: #fee2e2;
-        color: #991b1b;
+        background: rgba(246, 181, 183, 0.2);
+        color: #f6b5b7;
+        border: 1px solid #f6b5b7;
     }
     
     .status-uploaded {
-        background: #e5e7eb;
-        color: #374151;
+        background: rgba(66, 68, 83, 0.4);
+        color: #f6b5b7;
+        border: 1px solid #424453;
     }
     
     .metric-grid {
@@ -124,6 +157,16 @@
         grid-template-columns: 1fr 1fr;
         gap: 2rem;
         margin-bottom: 2rem;
+    }
+    
+    .text-muted {
+        color: rgba(246, 181, 183, 0.7) !important;
+    }
+    
+    .alert-danger {
+        background-color: rgba(246, 181, 183, 0.1);
+        border-color: #f6b5b7;
+        color: #f6b5b7;
     }
     
     @media (max-width: 768px) {
@@ -267,27 +310,27 @@ async function loadDashboardData() {
 function updateMetrics(stats) {
     const metricsGrid = document.getElementById('metricsGrid');
     metricsGrid.innerHTML = `
-        <div class="stat-card" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8);">
+        <div class="stat-card" style="background: linear-gradient(135deg, #424453, #9da0e5);">
             <div class="stat-number">${stats.total_analyses}</div>
             <div class="stat-label">Total Análisis</div>
         </div>
-        <div class="stat-card" style="background: linear-gradient(135deg, #10b981, #047857);">
+        <div class="stat-card" style="background: linear-gradient(135deg, #9da0e5, #fbceb1);">
             <div class="stat-number">${stats.completed_analyses}</div>
             <div class="stat-label">Completados</div>
         </div>
-        <div class="stat-card" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+        <div class="stat-card" style="background: linear-gradient(135deg, #fbceb1, #f6b5b7);">
             <div class="stat-number">${stats.processing_analyses}</div>
             <div class="stat-label">En Proceso</div>
         </div>
-        <div class="stat-card" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+        <div class="stat-card" style="background: linear-gradient(135deg, #f6b5b7, #9da0e5);">
             <div class="stat-number">${stats.success_rate}%</div>
             <div class="stat-label">Tasa de Éxito</div>
         </div>
-        <div class="stat-card" style="background: linear-gradient(135deg, #06b6d4, #0891b2);">
+        <div class="stat-card" style="background: linear-gradient(135deg, #424453, #fbceb1);">
             <div class="stat-number">${stats.audio_analyses}</div>
             <div class="stat-label">Análisis de Audio</div>
         </div>
-        <div class="stat-card" style="background: linear-gradient(135deg, #ef4444, #dc2626);">
+        <div class="stat-card" style="background: linear-gradient(135deg, #9da0e5, #424453);">
             <div class="stat-number">${stats.pdf_analyses}</div>
             <div class="stat-label">Análisis de PDF</div>
         </div>
@@ -297,15 +340,20 @@ function updateMetrics(stats) {
 function updateStatusChart(statusData) {
     const ctx = document.getElementById('statusChart').getContext('2d');
     
-    new Chart(ctx, {
+    // Destroy existing chart if it exists
+    if (window.statusChart) {
+        window.statusChart.destroy();
+    }
+    
+    window.statusChart = new Chart(ctx, {
         type: 'doughnut',
         data: {
             labels: statusData.map(item => item.name),
             datasets: [{
                 data: statusData.map(item => item.count),
-                backgroundColor: statusData.map(item => item.color),
+                backgroundColor: ['#9da0e5', '#fbceb1', '#f6b5b7', '#424453'],
                 borderWidth: 2,
-                borderColor: '#ffffff'
+                borderColor: '#2f313e'
             }]
         },
         options: {
@@ -323,15 +371,20 @@ function updateStatusChart(statusData) {
 function updateActivityChart(activityData) {
     const ctx = document.getElementById('activityChart').getContext('2d');
     
-    new Chart(ctx, {
+    // Destroy existing chart if it exists
+    if (window.activityChart) {
+        window.activityChart.destroy();
+    }
+    
+    window.activityChart = new Chart(ctx, {
         type: 'line',
         data: {
             labels: activityData.map(item => item.date),
             datasets: [{
                 label: 'Análisis por día',
                 data: activityData.map(item => item.count),
-                borderColor: '#3b82f6',
-                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                borderColor: '#9da0e5',
+                backgroundColor: 'rgba(157, 160, 229, 0.1)',
                 tension: 0.4,
                 fill: true
             }]
@@ -351,15 +404,20 @@ function updateActivityChart(activityData) {
 function updateSubjectChart(subjectData) {
     const ctx = document.getElementById('subjectChart').getContext('2d');
     
-    new Chart(ctx, {
+    // Destroy existing chart if it exists
+    if (window.subjectChart) {
+        window.subjectChart.destroy();
+    }
+    
+    window.subjectChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: subjectData.map(item => item.name),
             datasets: [{
                 label: 'Cantidad',
                 data: subjectData.map(item => item.count),
-                backgroundColor: 'rgba(16, 185, 129, 0.8)',
-                borderColor: '#10b981',
+                backgroundColor: 'rgba(251, 206, 177, 0.8)',
+                borderColor: '#fbceb1',
                 borderWidth: 1
             }]
         },
@@ -378,15 +436,20 @@ function updateSubjectChart(subjectData) {
 function updateGradeChart(gradeData) {
     const ctx = document.getElementById('gradeChart').getContext('2d');
     
-    new Chart(ctx, {
+    // Destroy existing chart if it exists
+    if (window.gradeChart) {
+        window.gradeChart.destroy();
+    }
+    
+    window.gradeChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: gradeData.map(item => item.name),
             datasets: [{
                 label: 'Cantidad',
                 data: gradeData.map(item => item.count),
-                backgroundColor: 'rgba(139, 92, 246, 0.8)',
-                borderColor: '#8b5cf6',
+                backgroundColor: 'rgba(246, 181, 183, 0.8)',
+                borderColor: '#f6b5b7',
                 borderWidth: 1
             }]
         },
