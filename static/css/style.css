@@ -26,8 +26,8 @@
     --color-bg: #2f313e;        /* Fondo principal oscuro */
     --color-bg-alt: #424453;    /* Fondo alternativo */
     --color-surface: #424453;   /* Superficie de tarjetas */
-    --color-text: #f6b5b7;      /* Texto principal rosa */
-    --color-text-secondary: #fbceb1;  /* Texto secundario */
+    --color-text: #ffffff;      /* Texto principal blanco */
+    --color-text-secondary: #ffffff;  /* Texto secundario blanco */
     --color-border: #424453;    /* Bordes */
 
     /* Botones CTA */
