@@ -741,6 +741,10 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 0.9rem;
 }
 
+.feature-item span {
+    color: var(--color-text-secondary);
+}
+
 .benefit-card {
     padding: 2rem 1rem;
 }
