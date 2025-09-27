@@ -469,8 +469,8 @@
     height: 120px;
     border-radius: 50%;
     background: conic-gradient(
-        var(--primary-color) calc(var(--score) * 3.6deg),
-        var(--light-gray) 0deg
+        var(--color-primary) calc(var(--score) * 3.6deg),
+        var(--color-border) 0deg
     );
     display: flex;
     align-items: center;
@@ -490,28 +490,40 @@
 .score-number {
     font-size: 2rem;
     font-weight: bold;
-    color: var(--primary-color);
+    color: var(--color-primary) !important;
     z-index: 1;
 }
 
 .score-total {
     font-size: 1rem;
-    color: var(--text-secondary);
+    color: var(--color-text-secondary) !important;
     z-index: 1;
 }
 
 .analysis-section {
     padding: 1.5rem;
-    border: 1px solid var(--medium-gray);
+    border: 1px solid var(--color-border);
     border-radius: var(--border-radius);
     height: 100%;
+    background: rgba(255, 255, 255, 0.98);
+}
+
+.analysis-section p,
+.analysis-section li,
+.analysis-section strong {
+    color: var(--color-text) !important;
 }
 
 .recommendations {
-    background: var(--light-gray);
+    background: rgba(30, 136, 229, 0.05);
     padding: 1rem;
     border-radius: 8px;
-    border-left: 4px solid var(--primary-color);
+    border-left: 4px solid var(--color-primary);
+}
+
+.recommendations strong,
+.recommendations li {
+    color: var(--color-text) !important;
 }
 
 .action-plan-list {
@@ -521,14 +533,27 @@
 .action-plan-list li {
     margin-bottom: 0.8rem;
     font-weight: 500;
+    color: var(--color-text) !important;
 }
 
 .bg-purple {
-    background-color: var(--accent-color) !important;
+    background-color: var(--color-insight) !important;
 }
 
 .text-purple {
-    color: var(--accent-color) !important;
+    color: var(--color-insight) !important;
+}
+
+/* Ensure all text in cards is visible */
+.card-body p,
+.card-body li,
+.card-body span,
+.card-body strong {
+    color: var(--color-text) !important;
+}
+
+.card-body .text-muted {
+    color: var(--color-text-secondary) !important;
 }
 </style>
 

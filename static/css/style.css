@@ -355,11 +355,18 @@ h1, h2, h3, h4, h5, h6 {
     display: block;
     font-size: 2rem;
     font-weight: bold;
+    color: var(--color-text) !important;
+}
+
+.score-total {
+    color: var(--color-text-secondary) !important;
+    font-size: 1rem;
 }
 
 .score-label {
     font-size: 0.875rem;
     opacity: 0.8;
+    color: var(--color-text-secondary) !important;
 }
 
 /* Progress Bars */
