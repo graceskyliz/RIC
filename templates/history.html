@@ -291,8 +291,23 @@
     box-shadow: 0 8px 32px rgba(30, 136, 229, 0.15);
 }
 
-.metric-icon {
+.metric-card:nth-child(1) .metric-icon {
     color: var(--color-primary);
+    margin-bottom: 0.5rem;
+}
+
+.metric-card:nth-child(2) .metric-icon {
+    color: var(--color-success);
+    margin-bottom: 0.5rem;
+}
+
+.metric-card:nth-child(3) .metric-icon {
+    color: var(--color-warning);
+    margin-bottom: 0.5rem;
+}
+
+.metric-card:nth-child(4) .metric-icon {
+    color: var(--color-danger);
     margin-bottom: 0.5rem;
 }
 
@@ -324,10 +339,20 @@
     font-weight: 600;
 }
 
+/* Colorize icons in tips section */
+.card.border-info .card-body h6 i[data-feather="mic"] {
+    color: var(--color-primary) !important;
+}
+
+.card.border-info .card-body h6 i[data-feather="clock"] {
+    color: var(--color-warning) !important;
+}
+
 .card.border-info .card-body ul li {
-    color: var(--color-text) !important;
+    color: #2c3e50 !important;
     font-size: 0.95rem !important;
     margin-bottom: 0.5rem;
+    font-weight: 500;
 }
 
 /* Subject and grade badges */
@@ -390,6 +415,35 @@
 
 .table-hover tbody tr:hover {
     background: rgba(30, 136, 229, 0.03) !important;
+}
+
+/* Table icons colorization */
+.table i[data-feather="file-audio"] {
+    color: var(--color-primary) !important;
+}
+
+.table i[data-feather="check-circle"] {
+    color: var(--color-success) !important;
+}
+
+.table i[data-feather="alert-circle"] {
+    color: var(--color-danger) !important;
+}
+
+.table i[data-feather="clock"] {
+    color: var(--color-warning) !important;
+}
+
+.table i[data-feather="upload"] {
+    color: var(--color-text-secondary) !important;
+}
+
+.table i[data-feather="eye"] {
+    color: var(--color-primary) !important;
+}
+
+.table i[data-feather="download"] {
+    color: var(--color-success) !important;
 }
 </style>
 
