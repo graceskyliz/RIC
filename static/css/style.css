@@ -481,6 +481,19 @@ h1, h2, h3, h4, h5, h6 {
     box-shadow: 0 4px 20px rgba(30, 136, 229, 0.1);
 }
 
+.lesson-planning-context {
+    background: linear-gradient(135deg, rgba(251, 192, 45, 0.12) 0%, rgba(251, 140, 0, 0.06) 100%);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    border: 1px solid rgba(251, 140, 0, 0.2);
+    box-shadow: 0 4px 20px rgba(251, 140, 0, 0.08);
+}
+
+.lesson-planning-context .form-label {
+    color: var(--color-text) !important;
+    font-weight: 600;
+}
+
 .educational-context-summary {
     margin-top: 0.5rem;
 }
@@ -999,11 +1012,18 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Form Enhancements */
+.form-label {
+    color: var(--color-text) !important;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
 .form-control {
     border: 2px solid rgba(30, 136, 229, 0.1);
     border-radius: 8px;
     transition: all 0.3s ease;
     background: rgba(255, 255, 255, 0.9);
+    color: var(--color-text);
 }
 
 .form-control:focus {
@@ -1017,6 +1037,7 @@ h1, h2, h3, h4, h5, h6 {
     border-radius: 8px;
     transition: all 0.3s ease;
     background: rgba(255, 255, 255, 0.9);
+    color: var(--color-text);
 }
 
 .form-select:focus {
