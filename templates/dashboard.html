@@ -4,18 +4,34 @@
 
 {% block head %}
 <style>
-    body {
+    /* Global color override for dashboard */
+    body, html {
         background-color: #2f313e !important;
         color: #f6b5b7 !important;
     }
     
-    .container {
-        color: #f6b5b7;
+    .container, .container * {
+        color: #f6b5b7 !important;
+    }
+    
+    /* Override navbar for dashboard */
+    .navbar-dark.bg-primary {
+        background: linear-gradient(135deg, #424453 0%, #9da0e5 100%) !important;
+    }
+    
+    /* Override footer */
+    footer.bg-light {
+        background: #424453 !important;
+        color: #f6b5b7 !important;
+    }
+    
+    footer.bg-light * {
+        color: #f6b5b7 !important;
     }
     
     .stat-card {
-        background: linear-gradient(135deg, #424453 0%, #9da0e5 100%);
-        color: #f6b5b7;
+        background: linear-gradient(135deg, #424453 0%, #9da0e5 100%) !important;
+        color: #f6b5b7 !important;
         border-radius: 15px;
         padding: 1.5rem;
         text-align: center;
