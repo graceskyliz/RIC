@@ -1,0 +1,447 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard de Progreso - RIC{% endblock %}
+
+{% block head %}
+<style>
+    .stat-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        text-align: center;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+    }
+    
+    .stat-label {
+        font-size: 0.9rem;
+        opacity: 0.9;
+    }
+    
+    .chart-container {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 1.5rem;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        margin-bottom: 2rem;
+    }
+    
+    .chart-title {
+        color: #1f2937;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        font-size: 1.1rem;
+    }
+    
+    .progress-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 3rem 0;
+        margin-bottom: 3rem;
+        border-radius: 0 0 25px 25px;
+    }
+    
+    .loading-spinner {
+        display: none;
+        text-align: center;
+        padding: 2rem;
+    }
+    
+    .loading-spinner.show {
+        display: block;
+    }
+    
+    .recent-item {
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 10px;
+        padding: 1rem;
+        margin-bottom: 0.5rem;
+        border-left: 4px solid;
+        transition: transform 0.2s ease;
+    }
+    
+    .recent-item:hover {
+        transform: translateX(5px);
+    }
+    
+    .recent-item.audio {
+        border-left-color: #3b82f6;
+    }
+    
+    .recent-item.pdf {
+        border-left-color: #ef4444;
+    }
+    
+    .status-badge {
+        padding: 0.25rem 0.75rem;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+    
+    .status-completed {
+        background: #d1fae5;
+        color: #065f46;
+    }
+    
+    .status-processing {
+        background: #fef3c7;
+        color: #92400e;
+    }
+    
+    .status-error {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+    
+    .status-uploaded {
+        background: #e5e7eb;
+        color: #374151;
+    }
+    
+    .metric-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+    }
+    
+    .analytics-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+        .analytics-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="progress-header">
+    <div class="container text-center">
+        <h1><i data-feather="bar-chart-2" class="me-3"></i>Dashboard de Progreso</h1>
+        <p class="lead mb-0">Analíticas y métricas de tu plataforma educativa RIC</p>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Loading State -->
+    <div class="loading-spinner" id="loadingSpinner">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando datos...</span>
+        </div>
+        <p class="mt-2 text-muted">Obteniendo métricas de progreso...</p>
+    </div>
+    
+    <!-- Dashboard Content -->
+    <div id="dashboardContent" style="display: none;">
+        <!-- Key Metrics -->
+        <div class="metric-grid" id="metricsGrid">
+            <!-- Metrics will be loaded here -->
+        </div>
+        
+        <!-- Analytics Charts -->
+        <div class="analytics-grid">
+            <!-- Status Distribution -->
+            <div class="chart-container">
+                <h5 class="chart-title">
+                    <i data-feather="pie-chart" class="me-2"></i>
+                    Estado de Análisis
+                </h5>
+                <canvas id="statusChart" width="400" height="300"></canvas>
+            </div>
+            
+            <!-- Activity Trends -->
+            <div class="chart-container">
+                <h5 class="chart-title">
+                    <i data-feather="trending-up" class="me-2"></i>
+                    Actividad Reciente (7 días)
+                </h5>
+                <canvas id="activityChart" width="400" height="300"></canvas>
+            </div>
+        </div>
+        
+        <!-- Subject and Grade Distribution -->
+        <div class="analytics-grid">
+            <div class="chart-container">
+                <h5 class="chart-title">
+                    <i data-feather="book" class="me-2"></i>
+                    Distribución por Materias
+                </h5>
+                <canvas id="subjectChart" width="400" height="300"></canvas>
+            </div>
+            
+            <div class="chart-container">
+                <h5 class="chart-title">
+                    <i data-feather="users" class="me-2"></i>
+                    Distribución por Grados
+                </h5>
+                <canvas id="gradeChart" width="400" height="300"></canvas>
+            </div>
+        </div>
+        
+        <!-- Recent Analyses -->
+        <div class="chart-container">
+            <h5 class="chart-title">
+                <i data-feather="clock" class="me-2"></i>
+                Análisis Recientes
+            </h5>
+            <div id="recentAnalyses">
+                <!-- Recent analyses will be loaded here -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    loadDashboardData();
+    
+    // Refresh data every 30 seconds
+    setInterval(loadDashboardData, 30000);
+});
+
+async function loadDashboardData() {
+    try {
+        document.getElementById('loadingSpinner').classList.add('show');
+        
+        const response = await fetch('/api/progress');
+        const data = await response.json();
+        
+        if (data.error) {
+            throw new Error(data.error);
+        }
+        
+        // Update metrics
+        updateMetrics(data.total_stats);
+        
+        // Update charts
+        updateStatusChart(data.distributions.status);
+        updateActivityChart(data.activity_trends.recent_activity);
+        updateSubjectChart(data.distributions.subjects);
+        updateGradeChart(data.distributions.grades);
+        
+        // Update recent analyses
+        updateRecentAnalyses(data.recent_analyses);
+        
+        // Show content and hide loading
+        document.getElementById('loadingSpinner').classList.remove('show');
+        document.getElementById('dashboardContent').style.display = 'block';
+        
+    } catch (error) {
+        console.error('Error loading dashboard data:', error);
+        document.getElementById('loadingSpinner').innerHTML = `
+            <div class="alert alert-danger">
+                <i data-feather="alert-circle" class="me-2"></i>
+                Error al cargar los datos del dashboard: ${error.message}
+            </div>
+        `;
+        feather.replace();
+    }
+}
+
+function updateMetrics(stats) {
+    const metricsGrid = document.getElementById('metricsGrid');
+    metricsGrid.innerHTML = `
+        <div class="stat-card" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8);">
+            <div class="stat-number">${stats.total_analyses}</div>
+            <div class="stat-label">Total Análisis</div>
+        </div>
+        <div class="stat-card" style="background: linear-gradient(135deg, #10b981, #047857);">
+            <div class="stat-number">${stats.completed_analyses}</div>
+            <div class="stat-label">Completados</div>
+        </div>
+        <div class="stat-card" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+            <div class="stat-number">${stats.processing_analyses}</div>
+            <div class="stat-label">En Proceso</div>
+        </div>
+        <div class="stat-card" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+            <div class="stat-number">${stats.success_rate}%</div>
+            <div class="stat-label">Tasa de Éxito</div>
+        </div>
+        <div class="stat-card" style="background: linear-gradient(135deg, #06b6d4, #0891b2);">
+            <div class="stat-number">${stats.audio_analyses}</div>
+            <div class="stat-label">Análisis de Audio</div>
+        </div>
+        <div class="stat-card" style="background: linear-gradient(135deg, #ef4444, #dc2626);">
+            <div class="stat-number">${stats.pdf_analyses}</div>
+            <div class="stat-label">Análisis de PDF</div>
+        </div>
+    `;
+}
+
+function updateStatusChart(statusData) {
+    const ctx = document.getElementById('statusChart').getContext('2d');
+    
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: statusData.map(item => item.name),
+            datasets: [{
+                data: statusData.map(item => item.count),
+                backgroundColor: statusData.map(item => item.color),
+                borderWidth: 2,
+                borderColor: '#ffffff'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+}
+
+function updateActivityChart(activityData) {
+    const ctx = document.getElementById('activityChart').getContext('2d');
+    
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: activityData.map(item => item.date),
+            datasets: [{
+                label: 'Análisis por día',
+                data: activityData.map(item => item.count),
+                borderColor: '#3b82f6',
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+function updateSubjectChart(subjectData) {
+    const ctx = document.getElementById('subjectChart').getContext('2d');
+    
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: subjectData.map(item => item.name),
+            datasets: [{
+                label: 'Cantidad',
+                data: subjectData.map(item => item.count),
+                backgroundColor: 'rgba(16, 185, 129, 0.8)',
+                borderColor: '#10b981',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+function updateGradeChart(gradeData) {
+    const ctx = document.getElementById('gradeChart').getContext('2d');
+    
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: gradeData.map(item => item.name),
+            datasets: [{
+                label: 'Cantidad',
+                data: gradeData.map(item => item.count),
+                backgroundColor: 'rgba(139, 92, 246, 0.8)',
+                borderColor: '#8b5cf6',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+function updateRecentAnalyses(analyses) {
+    const container = document.getElementById('recentAnalyses');
+    
+    if (analyses.length === 0) {
+        container.innerHTML = '<p class="text-muted text-center">No hay análisis recientes</p>';
+        return;
+    }
+    
+    container.innerHTML = analyses.map(analysis => `
+        <div class="recent-item ${analysis.type}">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>${analysis.filename}</strong>
+                    <br>
+                    <small class="text-muted">
+                        ${analysis.subject} - ${analysis.grade} | 
+                        <i data-feather="${analysis.type === 'audio' ? 'mic' : 'file-text'}" class="me-1"></i>
+                        ${analysis.type === 'audio' ? 'Audio' : 'PDF'}
+                    </small>
+                </div>
+                <div class="text-end">
+                    <span class="status-badge status-${analysis.status}">${getStatusText(analysis.status)}</span>
+                    <br>
+                    <small class="text-muted">${analysis.upload_time}</small>
+                </div>
+            </div>
+        </div>
+    `).join('');
+    
+    feather.replace();
+}
+
+function getStatusText(status) {
+    const statusMap = {
+        'completed': 'Completado',
+        'processing': 'Procesando',
+        'error': 'Error',
+        'uploaded': 'Pendiente'
+    };
+    return statusMap[status] || status;
+}
+</script>
+{% endblock %}

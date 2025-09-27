@@ -194,6 +194,138 @@ def history():
     analyses = ClassroomAnalysis.query.order_by(ClassroomAnalysis.upload_timestamp.desc()).all()
     return render_template('history.html', analyses=analyses)
 
+@app.route('/dashboard')
+def dashboard():
+    """Show progress dashboard with analytics"""
+    return render_template('dashboard.html')
+
+@app.route('/api/progress')
+def get_progress_data():
+    """Get comprehensive progress analytics"""
+    try:
+        # Basic counts
+        total_analyses = ClassroomAnalysis.query.count()
+        audio_analyses = ClassroomAnalysis.query.filter_by(analysis_type='audio').count()
+        pdf_analyses = ClassroomAnalysis.query.filter_by(analysis_type='pdf').count()
+        
+        # Status distribution
+        completed_analyses = ClassroomAnalysis.query.filter_by(status='completed').count()
+        processing_analyses = ClassroomAnalysis.query.filter_by(status='processing').count()
+        error_analyses = ClassroomAnalysis.query.filter_by(status='error').count()
+        uploaded_analyses = ClassroomAnalysis.query.filter_by(status='uploaded').count()
+        
+        # Subject distribution (top 10)
+        subject_stats = db.session.query(
+            ClassroomAnalysis.subject, 
+            db.func.count(ClassroomAnalysis.id).label('count')
+        ).filter(
+            ClassroomAnalysis.subject.isnot(None)
+        ).group_by(ClassroomAnalysis.subject).order_by(
+            db.func.count(ClassroomAnalysis.id).desc()
+        ).limit(10).all()
+        
+        # Grade level distribution
+        grade_stats = db.session.query(
+            ClassroomAnalysis.grade_level, 
+            db.func.count(ClassroomAnalysis.id).label('count')
+        ).filter(
+            ClassroomAnalysis.grade_level.isnot(None)
+        ).group_by(ClassroomAnalysis.grade_level).order_by(
+            db.func.count(ClassroomAnalysis.id).desc()
+        ).limit(10).all()
+        
+        # Recent activity (last 7 days)
+        from datetime import datetime, timedelta
+        week_ago = datetime.utcnow() - timedelta(days=7)
+        recent_activity = db.session.query(
+            db.func.date(ClassroomAnalysis.upload_timestamp).label('date'),
+            db.func.count(ClassroomAnalysis.id).label('count')
+        ).filter(
+            ClassroomAnalysis.upload_timestamp >= week_ago
+        ).group_by(
+            db.func.date(ClassroomAnalysis.upload_timestamp)
+        ).order_by(
+            db.func.date(ClassroomAnalysis.upload_timestamp)
+        ).all()
+        
+        # Success rate calculation
+        success_rate = (completed_analyses / total_analyses * 100) if total_analyses > 0 else 0
+        
+        # Average processing time for completed analyses
+        completed_with_times = ClassroomAnalysis.query.filter(
+            ClassroomAnalysis.status == 'completed',
+            ClassroomAnalysis.analysis_timestamp.isnot(None)
+        ).all()
+        
+        processing_times = []
+        for analysis in completed_with_times:
+            if analysis.analysis_timestamp and analysis.upload_timestamp:
+                diff = analysis.analysis_timestamp - analysis.upload_timestamp
+                processing_times.append(diff.total_seconds())
+        
+        avg_processing_time = sum(processing_times) / len(processing_times) if processing_times else 0
+        
+        # Most active time periods
+        hour_stats = db.session.query(
+            db.func.extract('hour', ClassroomAnalysis.upload_timestamp).label('hour'),
+            db.func.count(ClassroomAnalysis.id).label('count')
+        ).group_by(
+            db.func.extract('hour', ClassroomAnalysis.upload_timestamp)
+        ).order_by(
+            db.func.count(ClassroomAnalysis.id).desc()
+        ).limit(5).all()
+        
+        # Recent analyses with details
+        recent_analyses = ClassroomAnalysis.query.order_by(
+            ClassroomAnalysis.upload_timestamp.desc()
+        ).limit(10).all()
+        
+        recent_list = []
+        for analysis in recent_analyses:
+            recent_list.append({
+                'id': analysis.id,
+                'filename': analysis.original_filename,
+                'type': analysis.analysis_type,
+                'subject': analysis.subject or 'General',
+                'grade': analysis.grade_level or 'No especificado',
+                'status': analysis.status,
+                'upload_time': analysis.upload_timestamp.strftime('%Y-%m-%d %H:%M'),
+                'processing_time': analysis.analysis_timestamp.strftime('%Y-%m-%d %H:%M') if analysis.analysis_timestamp else None
+            })
+        
+        return jsonify({
+            'total_stats': {
+                'total_analyses': total_analyses,
+                'audio_analyses': audio_analyses,
+                'pdf_analyses': pdf_analyses,
+                'completed_analyses': completed_analyses,
+                'processing_analyses': processing_analyses,
+                'error_analyses': error_analyses,
+                'uploaded_analyses': uploaded_analyses,
+                'success_rate': round(success_rate, 1),
+                'avg_processing_time': round(avg_processing_time, 1)
+            },
+            'distributions': {
+                'subjects': [{'name': s.subject or 'Sin especificar', 'count': s.count} for s in subject_stats],
+                'grades': [{'name': g.grade_level or 'Sin especificar', 'count': g.count} for g in grade_stats],
+                'status': [
+                    {'name': 'Completados', 'count': completed_analyses, 'color': '#10b981'},
+                    {'name': 'Procesando', 'count': processing_analyses, 'color': '#f59e0b'},
+                    {'name': 'Error', 'count': error_analyses, 'color': '#ef4444'},
+                    {'name': 'Pendientes', 'count': uploaded_analyses, 'color': '#6b7280'}
+                ]
+            },
+            'activity_trends': {
+                'recent_activity': [{'date': str(r.date), 'count': r.count} for r in recent_activity],
+                'hourly_activity': [{'hour': int(h.hour), 'count': h.count} for h in hour_stats]
+            },
+            'recent_analyses': recent_list
+        })
+        
+    except Exception as e:
+        logging.error(f"Error getting progress data: {str(e)}")
+        return jsonify({'error': 'Error al obtener datos de progreso'}), 500
+
 def process_audio_analysis(analysis):
     """Process audio file and generate analysis"""
     try:
