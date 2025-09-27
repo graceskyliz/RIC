@@ -85,9 +85,9 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const textRotator = document.getElementById('ricTextRotator');
-            const texts = [
-                'Coach de Enseñanza IA',
-                'Rápido Innovador y Contínuo.'
+            const textData = [
+                { text: 'Coach de Enseñanza IA', color: '#FBC02D' }, // Amarillo
+                { text: 'Rápido Innovador y Contínuo.', color: '#2E7D32' } // Verde
             ];
             let currentIndex = 0;
             
@@ -97,18 +97,19 @@
                 textRotator.style.transform = 'translateY(-5px)';
                 
                 setTimeout(() => {
-                    // Change text
-                    currentIndex = (currentIndex + 1) % texts.length;
-                    textRotator.textContent = texts[currentIndex];
+                    // Change text and color
+                    currentIndex = (currentIndex + 1) % textData.length;
+                    textRotator.textContent = textData[currentIndex].text;
+                    textRotator.style.color = textData[currentIndex].color;
                     
                     // Fade in
-                    textRotator.style.opacity = '0.75';
+                    textRotator.style.opacity = '0.85';
                     textRotator.style.transform = 'translateY(0)';
                 }, 300);
             }
             
             // Add CSS transition
-            textRotator.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+            textRotator.style.transition = 'opacity 0.3s ease, transform 0.3s ease, color 0.3s ease';
             
             // Start rotation every 3 seconds
             setInterval(rotateText, 3000);
