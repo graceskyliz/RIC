@@ -7,9 +7,9 @@ class LessonPlanAgent:
     """AI Agent specialized in pedagogical analysis of lesson plans using GPT-4o"""
     
     def __init__(self):
-        # Use the latest OpenAI model
+        # Using GPT-4-turbo as requested
         self.client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
-        self.model = "gpt-4o"
+        self.model = "gpt-4-turbo"
     
     def generate_pedagogical_feedback(self, analysis_data):
         """
