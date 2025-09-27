@@ -288,24 +288,62 @@ async function loadDashboardData() {
     try {
         document.getElementById('loadingSpinner').classList.add('show');
         
+        // Check if Chart.js is available
+        if (typeof Chart === 'undefined') {
+            throw new Error('Chart.js library is not loaded');
+        }
+        
         const response = await fetch('/api/progress');
+        
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
         const data = await response.json();
         
         if (data.error) {
             throw new Error(data.error);
         }
         
+        // Verify data structure
+        if (!data.total_stats || !data.distributions || !data.activity_trends || !data.recent_analyses) {
+            throw new Error('Invalid data structure received from API');
+        }
+        
         // Update metrics
         updateMetrics(data.total_stats);
         
-        // Update charts
-        updateStatusChart(data.distributions.status);
-        updateActivityChart(data.activity_trends.recent_activity);
-        updateSubjectChart(data.distributions.subjects);
-        updateGradeChart(data.distributions.grades);
+        // Update charts one by one with error handling
+        try {
+            updateStatusChart(data.distributions.status);
+        } catch (e) {
+            console.error('Error updating status chart:', e);
+        }
+        
+        try {
+            updateActivityChart(data.activity_trends.recent_activity);
+        } catch (e) {
+            console.error('Error updating activity chart:', e);
+        }
+        
+        try {
+            updateSubjectChart(data.distributions.subjects);
+        } catch (e) {
+            console.error('Error updating subject chart:', e);
+        }
+        
+        try {
+            updateGradeChart(data.distributions.grades);
+        } catch (e) {
+            console.error('Error updating grade chart:', e);
+        }
         
         // Update recent analyses
-        updateRecentAnalyses(data.recent_analyses);
+        try {
+            updateRecentAnalyses(data.recent_analyses);
+        } catch (e) {
+            console.error('Error updating recent analyses:', e);
+        }
         
         // Show content and hide loading
         document.getElementById('loadingSpinner').classList.remove('show');
@@ -313,10 +351,15 @@ async function loadDashboardData() {
         
     } catch (error) {
         console.error('Error loading dashboard data:', error);
+        console.error('Error details:', {
+            name: error.name,
+            message: error.message,
+            stack: error.stack
+        });
         document.getElementById('loadingSpinner').innerHTML = `
             <div class="alert alert-danger">
                 <i data-feather="alert-circle" class="me-2"></i>
-                Error al cargar los datos del dashboard: ${error.message}
+                Error al cargar los datos del dashboard: ${error.message || 'Error desconocido'}
             </div>
         `;
         feather.replace();
