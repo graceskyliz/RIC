@@ -36,7 +36,7 @@
     <div class="row mb-4">
         <div class="col-md-3">
             <div class="metric-card">
-                <div class="metric-icon">
+                <div class="metric-icon total-analysis-icon">
                     <i data-feather="file-audio"></i>
                 </div>
                 <div class="metric-value">{{ analyses|length }}</div>
@@ -45,7 +45,7 @@
         </div>
         <div class="col-md-3">
             <div class="metric-card">
-                <div class="metric-icon">
+                <div class="metric-icon completed-icon">
                     <i data-feather="check-circle"></i>
                 </div>
                 <div class="metric-value">{{ analyses|selectattr('status', 'equalto', 'completed')|list|length }}</div>
@@ -54,7 +54,7 @@
         </div>
         <div class="col-md-3">
             <div class="metric-card">
-                <div class="metric-icon">
+                <div class="metric-icon processing-icon">
                     <i data-feather="clock"></i>
                 </div>
                 <div class="metric-value">{{ analyses|selectattr('status', 'equalto', 'processing')|list|length }}</div>
@@ -63,7 +63,7 @@
         </div>
         <div class="col-md-3">
             <div class="metric-card">
-                <div class="metric-icon">
+                <div class="metric-icon error-icon">
                     <i data-feather="alert-circle"></i>
                 </div>
                 <div class="metric-value">{{ analyses|selectattr('status', 'equalto', 'error')|list|length }}</div>
@@ -291,23 +291,31 @@
     box-shadow: 0 8px 32px rgba(30, 136, 229, 0.15);
 }
 
-.metric-card:nth-child(1) .metric-icon {
-    color: var(--color-primary);
-    margin-bottom: 0.5rem;
+.total-analysis-icon i {
+    color: #1E88E5 !important;
+    width: 48px;
+    height: 48px;
 }
 
-.metric-card:nth-child(2) .metric-icon {
-    color: var(--color-success);
-    margin-bottom: 0.5rem;
+.completed-icon i {
+    color: #2E7D32 !important;
+    width: 48px;
+    height: 48px;
 }
 
-.metric-card:nth-child(3) .metric-icon {
-    color: var(--color-warning);
-    margin-bottom: 0.5rem;
+.processing-icon i {
+    color: #FBC02D !important;
+    width: 48px;
+    height: 48px;
 }
 
-.metric-card:nth-child(4) .metric-icon {
-    color: var(--color-danger);
+.error-icon i {
+    color: #E53935 !important;
+    width: 48px;
+    height: 48px;
+}
+
+.metric-icon {
     margin-bottom: 0.5rem;
 }
 
@@ -349,10 +357,11 @@
 }
 
 .card.border-info .card-body ul li {
-    color: #2c3e50 !important;
+    color: #000000 !important;
     font-size: 0.95rem !important;
     margin-bottom: 0.5rem;
-    font-weight: 500;
+    font-weight: 600;
+    text-shadow: 0 0 1px rgba(255, 255, 255, 0.8);
 }
 
 /* Subject and grade badges */
