@@ -108,6 +108,11 @@ h1, h2, h3, h4, h5, h6 {
     backdrop-filter: blur(10px);
 }
 
+.card-body {
+    background: rgba(255, 255, 255, 0.98);
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+}
+
 .card:hover {
     transform: translateY(-2px);
     box-shadow: 0 16px 40px rgba(30, 136, 229, 0.2), 0 8px 16px rgba(0, 0, 0, 0.1);
