@@ -26,7 +26,7 @@
             <a class="navbar-brand d-flex align-items-center" href="{{ url_for('index') }}">
                 <i data-feather="award" class="me-2"></i>
                 <span class="fw-bold">RIC</span>
-                <span class="ms-2 text-light opacity-75">Coach de Enseñanza IA</span>
+                <span class="ms-2 text-light opacity-75" id="ricTextRotator">Coach de Enseñanza IA</span>
             </a>
             
             <div class="navbar-nav ms-auto">
@@ -79,6 +79,40 @@
     <!-- Initialize Feather Icons -->
     <script>
         feather.replace();
+    </script>
+    
+    <!-- RIC Text Rotator Animation -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const textRotator = document.getElementById('ricTextRotator');
+            const texts = [
+                'Coach de Enseñanza IA',
+                'Rápido Innovador y Contínuo.'
+            ];
+            let currentIndex = 0;
+            
+            function rotateText() {
+                // Fade out
+                textRotator.style.opacity = '0';
+                textRotator.style.transform = 'translateY(-5px)';
+                
+                setTimeout(() => {
+                    // Change text
+                    currentIndex = (currentIndex + 1) % texts.length;
+                    textRotator.textContent = texts[currentIndex];
+                    
+                    // Fade in
+                    textRotator.style.opacity = '0.75';
+                    textRotator.style.transform = 'translateY(0)';
+                }, 300);
+            }
+            
+            // Add CSS transition
+            textRotator.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+            
+            // Start rotation every 3 seconds
+            setInterval(rotateText, 3000);
+        });
     </script>
     
     {% block scripts %}{% endblock %}
