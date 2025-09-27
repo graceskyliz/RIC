@@ -13,7 +13,7 @@
     </nav>
 
     <!-- Header -->
-    <div class="row align-items-center mb-5">
+    <div class="audio-header-section row align-items-center mb-5">
         <div class="col-lg-8">
             <h1 class="display-5 fw-bold text-primary mb-3">
                 <i data-feather="volume-2" class="me-3"></i>
@@ -32,10 +32,10 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="audio-upload-section row">
         <!-- Upload Form -->
         <div class="col-lg-8">
-            <div class="card shadow-lg">
+            <div class="card shadow-lg audio-upload-card">
                 <div class="card-header bg-primary text-white">
                     <h5 class="card-title mb-0">
                         <i data-feather="mic" class="me-2"></i>
@@ -45,7 +45,7 @@
                 <div class="card-body p-4">
                     <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data" id="audioUploadForm">
                         <!-- Educational Context -->
-                        <div class="educational-context mb-4">
+                        <div class="educational-context-section mb-4">
                             <h6 class="text-muted mb-3">
                                 <i data-feather="info" class="me-2"></i>
                                 Contexto Educativo
@@ -111,7 +111,7 @@
                         </div>
                         
                         <!-- Audio Upload -->
-                        <div class="upload-section">
+                        <div class="audio-upload-controls-section">
                             <h6 class="text-muted mb-3">
                                 <i data-feather="upload" class="me-2"></i>
                                 Audio de la Clase
@@ -212,8 +212,8 @@
         
         <!-- Recent Audio Analyses -->
         <div class="col-lg-4">
-            <div class="card">
-                <div class="card-header">
+            <div class="card recent-audio-card">
+                <div class="card-header recent-audio-header">
                     <h6 class="card-title mb-0">
                         <i data-feather="clock" class="me-2"></i>
                         Análisis de Audio Recientes
@@ -251,4 +251,288 @@
 
 <!-- Include the audio upload JavaScript -->
 <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+
+<style>
+/* Colorful Audio Upload Sections */
+.audio-header-section {
+    background: linear-gradient(135deg, rgba(30, 136, 229, 0.12) 0%, rgba(46, 125, 50, 0.08) 50%, rgba(251, 140, 0, 0.06) 100%);
+    border-radius: var(--border-radius);
+    padding: 3rem 2rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 8px 32px rgba(30, 136, 229, 0.15);
+    backdrop-filter: blur(10px);
+}
+
+.audio-upload-section {
+    background: linear-gradient(135deg, rgba(46, 125, 50, 0.06) 0%, rgba(30, 136, 229, 0.05) 50%, rgba(126, 87, 194, 0.04) 100%);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 6px 28px rgba(46, 125, 50, 0.1);
+}
+
+/* Enhanced Upload Card */
+.audio-upload-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(245, 247, 250, 0.95) 100%);
+    backdrop-filter: blur(15px);
+    border: 3px solid rgba(30, 136, 229, 0.1);
+    box-shadow: 0 12px 48px rgba(30, 136, 229, 0.2);
+    transition: all 0.4s ease;
+}
+
+.audio-upload-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--color-primary);
+    box-shadow: 0 20px 60px rgba(30, 136, 229, 0.25);
+}
+
+.audio-upload-card .card-header {
+    background: linear-gradient(135deg, var(--color-primary) 0%, rgba(30, 136, 229, 0.9) 100%);
+    border-bottom: none;
+    color: white;
+}
+
+/* Educational Context Section */
+.educational-context-section {
+    background: linear-gradient(135deg, rgba(46, 125, 50, 0.05) 0%, rgba(30, 136, 229, 0.03) 100%);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    border: 2px solid rgba(46, 125, 50, 0.1);
+    transition: all 0.3s ease;
+}
+
+.educational-context-section:hover {
+    border-color: var(--color-success);
+    box-shadow: 0 8px 32px rgba(46, 125, 50, 0.15);
+}
+
+/* Audio Upload Controls Section */
+.audio-upload-controls-section {
+    background: linear-gradient(135deg, rgba(251, 140, 0, 0.05) 0%, rgba(251, 192, 45, 0.03) 100%);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    border: 2px solid rgba(251, 140, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.audio-upload-controls-section:hover {
+    border-color: var(--color-cta);
+    box-shadow: 0 8px 32px rgba(251, 140, 0, 0.15);
+}
+
+/* Enhanced Upload Area */
+.upload-area {
+    background: linear-gradient(135deg, rgba(30, 136, 229, 0.03) 0%, rgba(255, 255, 255, 0.95) 100%);
+    border: 3px dashed var(--color-border);
+    border-radius: var(--border-radius);
+    padding: 3rem 2rem;
+    text-align: center;
+    transition: all 0.4s ease;
+    cursor: pointer;
+}
+
+.upload-area:hover {
+    border-color: var(--color-primary);
+    background: linear-gradient(135deg, rgba(30, 136, 229, 0.08) 0%, rgba(255, 255, 255, 0.98) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(30, 136, 229, 0.15);
+}
+
+.upload-icon {
+    color: var(--color-primary);
+    width: 48px;
+    height: 48px;
+    transition: all 0.3s ease;
+}
+
+.upload-area:hover .upload-icon {
+    transform: scale(1.1);
+    color: var(--color-primary);
+}
+
+/* Recording Interface */
+.recording-interface {
+    background: linear-gradient(135deg, rgba(46, 125, 50, 0.05) 0%, rgba(30, 136, 229, 0.03) 100%);
+    border-radius: var(--border-radius);
+    border: 2px solid rgba(46, 125, 50, 0.1);
+    padding: 1rem;
+}
+
+.recording-controls {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: var(--border-radius);
+    backdrop-filter: blur(10px);
+}
+
+.recording-indicator {
+    width: 12px;
+    height: 12px;
+    background: var(--color-danger);
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px;
+    animation: pulse 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+    from { opacity: 1; }
+    to { opacity: 0.3; }
+}
+
+/* Form Controls Enhancement */
+.form-control, .form-select {
+    border: 2px solid var(--color-border);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.98);
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 0.2rem rgba(30, 136, 229, 0.25);
+    background: white;
+}
+
+/* Button Enhancements */
+.btn-group .btn {
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.btn-outline-primary:hover {
+    background: linear-gradient(135deg, var(--color-primary) 0%, rgba(30, 136, 229, 0.9) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(30, 136, 229, 0.3);
+}
+
+.btn-outline-secondary:hover {
+    background: linear-gradient(135deg, var(--color-text-secondary) 0%, rgba(108, 117, 125, 0.9) 100%);
+    transform: translateY(-2px);
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg, var(--color-success) 0%, rgba(46, 125, 50, 0.9) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(46, 125, 50, 0.3);
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg, var(--color-danger) 0%, rgba(229, 57, 53, 0.9) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(229, 57, 53, 0.3);
+}
+
+.btn-primary.btn-lg:hover {
+    background: linear-gradient(135deg, var(--color-primary) 0%, rgba(30, 136, 229, 0.8) 100%);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 12px 40px rgba(30, 136, 229, 0.4);
+}
+
+/* Recent Audio Card */
+.recent-audio-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(245, 247, 250, 0.95) 100%);
+    backdrop-filter: blur(10px);
+    border: 3px solid rgba(126, 87, 194, 0.1);
+    box-shadow: 0 8px 32px rgba(126, 87, 194, 0.15);
+    transition: all 0.4s ease;
+}
+
+.recent-audio-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--color-insight);
+    box-shadow: 0 16px 48px rgba(126, 87, 194, 0.2);
+}
+
+.recent-audio-header {
+    background: linear-gradient(135deg, var(--color-insight) 0%, rgba(126, 87, 194, 0.9) 100%);
+    color: white;
+    border-bottom: none;
+}
+
+/* Analysis Items */
+.analysis-item {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(250, 252, 255, 0.95) 100%);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.analysis-item:hover {
+    border-color: var(--color-insight);
+    transform: translateX(4px);
+    box-shadow: 0 6px 20px rgba(126, 87, 194, 0.15);
+}
+
+/* File Selected Display */
+.file-selected .selected-file-info {
+    background: linear-gradient(135deg, rgba(46, 125, 50, 0.08) 0%, rgba(255, 255, 255, 0.98) 100%);
+    border: 2px solid var(--color-success);
+    border-radius: var(--border-radius);
+    transition: all 0.3s ease;
+}
+
+.file-selected .selected-file-info:hover {
+    box-shadow: 0 6px 20px rgba(46, 125, 50, 0.2);
+}
+
+/* Audio Preview */
+.audio-preview {
+    background: linear-gradient(135deg, rgba(30, 136, 229, 0.05) 0%, rgba(255, 255, 255, 0.98) 100%);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    border: 2px solid rgba(30, 136, 229, 0.1);
+}
+
+/* Text Color Fixes */
+.audio-header-section h1,
+.audio-header-section p {
+    color: var(--color-text) !important;
+    text-shadow: 0 2px 8px rgba(30, 136, 229, 0.1);
+}
+
+.educational-context-section h6,
+.audio-upload-controls-section h6 {
+    color: var(--color-text) !important;
+}
+
+.analysis-item h6,
+.analysis-item p {
+    color: var(--color-text) !important;
+}
+
+/* Subject Badge Enhancements */
+.subject-badge {
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.subject-matematicas {
+    background: rgba(30, 136, 229, 0.1);
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.subject-espanol {
+    background: rgba(46, 125, 50, 0.1);
+    color: var(--color-success);
+    border-color: var(--color-success);
+}
+
+.subject-ciencias-naturales {
+    background: rgba(251, 140, 0, 0.1);
+    color: var(--color-cta);
+    border-color: var(--color-cta);
+}
+
+.subject-badge:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+</style>
 {% endblock %}
