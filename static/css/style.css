@@ -55,7 +55,8 @@
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     color: var(--color-text);
-    background: linear-gradient(135deg, var(--color-bg) 0%, var(--color-bg-alt) 100%);
+    background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 50%, #90CAF9 100%);
+    min-height: 100vh;
     line-height: 1.6;
 }
 
@@ -94,31 +95,33 @@ h1, h2, h3, h4, h5, h6 {
 
 .navbar-dark {
     background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)) !important;
+    box-shadow: 0 4px 20px rgba(30, 136, 229, 0.3);
 }
 
 /* Cards */
 .card {
     border: none;
     border-radius: var(--border-radius);
-    box-shadow: var(--box-shadow);
+    box-shadow: 0 8px 32px rgba(30, 136, 229, 0.12);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    background: var(--color-bg);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
 }
 
 .card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 16px 40px rgba(30, 136, 229, 0.2), 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
 /* Upload Area */
 .upload-area {
-    border: 2px dashed var(--color-border);
+    border: 2px dashed rgba(30, 136, 229, 0.3);
     border-radius: var(--border-radius);
     padding: 3rem 2rem;
     text-align: center;
     cursor: pointer;
     transition: all 0.3s ease;
-    background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-bg) 100%);
+    background: linear-gradient(135deg, rgba(30, 136, 229, 0.08) 0%, rgba(100, 181, 246, 0.05) 100%);
 }
 
 .upload-area:hover {
@@ -151,13 +154,14 @@ h1, h2, h3, h4, h5, h6 {
     display: inline-flex;
     align-items: center;
     padding: 0.5rem 1rem;
-    background: rgba(30, 136, 229, 0.1);
+    background: linear-gradient(135deg, rgba(30, 136, 229, 0.15) 0%, rgba(100, 181, 246, 0.1) 100%);
     color: var(--color-primary);
     border-radius: 20px;
     font-size: 0.875rem;
     font-weight: 500;
-    border: 1px solid rgba(30, 136, 229, 0.2);
+    border: 1px solid rgba(30, 136, 229, 0.3);
     transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(30, 136, 229, 0.15);
 }
 
 .feature-badge:hover {
@@ -465,10 +469,11 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Educational Context Styling */
 .educational-context {
-    background: linear-gradient(135deg, rgba(30, 136, 229, 0.05) 0%, rgba(30, 136, 229, 0.02) 100%);
+    background: linear-gradient(135deg, rgba(30, 136, 229, 0.15) 0%, rgba(100, 181, 246, 0.08) 100%);
     border-radius: var(--border-radius);
     padding: 1.5rem;
-    border: 1px solid rgba(30, 136, 229, 0.1);
+    border: 1px solid rgba(30, 136, 229, 0.2);
+    box-shadow: 0 4px 20px rgba(30, 136, 229, 0.1);
 }
 
 .educational-context-summary {
@@ -481,10 +486,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .upload-section {
-    background: var(--color-bg);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(245, 247, 250, 0.9) 100%);
     border-radius: var(--border-radius);
     padding: 1rem;
-    border: 1px solid var(--color-border);
+    border: 1px solid rgba(30, 136, 229, 0.1);
+    box-shadow: 0 2px 16px rgba(30, 136, 229, 0.08);
 }
 
 /* Educational Theme Colors */
@@ -707,10 +713,11 @@ h1, h2, h3, h4, h5, h6 {
 /* Analysis Cards */
 .analysis-card, .analysis-type-card {
     border: none;
-    background: var(--color-bg);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(245, 247, 250, 0.9) 100%);
     transition: all 0.3s ease;
     border-radius: var(--border-radius);
-    box-shadow: var(--box-shadow);
+    box-shadow: 0 8px 32px rgba(30, 136, 229, 0.12);
+    backdrop-filter: blur(10px);
 }
 
 .analysis-card:hover, .analysis-type-card:hover {
@@ -949,4 +956,93 @@ h1, h2, h3, h4, h5, h6 {
 
 .text-purple {
     color: var(--color-insight) !important;
+}
+
+/* Enhanced Section Backgrounds */
+.hero-section {
+    background: linear-gradient(135deg, rgba(30, 136, 229, 0.1) 0%, rgba(126, 87, 194, 0.08) 50%, rgba(251, 140, 0, 0.05) 100%);
+    border-radius: var(--border-radius);
+    padding: 3rem 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 8px 32px rgba(30, 136, 229, 0.1);
+}
+
+.analysis-options-section {
+    background: linear-gradient(135deg, rgba(46, 125, 50, 0.08) 0%, rgba(30, 136, 229, 0.05) 100%);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+}
+
+.recent-analyses-section {
+    background: linear-gradient(135deg, rgba(126, 87, 194, 0.08) 0%, rgba(251, 192, 45, 0.05) 100%);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    box-shadow: 0 4px 24px rgba(126, 87, 194, 0.1);
+}
+
+.benefits-section {
+    background: linear-gradient(135deg, rgba(251, 140, 0, 0.08) 0%, rgba(30, 136, 229, 0.05) 100%);
+    border-radius: var(--border-radius);
+    padding: 3rem 2rem;
+    margin-top: 2rem;
+    box-shadow: 0 8px 32px rgba(251, 140, 0, 0.1);
+}
+
+/* Form Enhancements */
+.form-control {
+    border: 2px solid rgba(30, 136, 229, 0.1);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.form-control:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 0.2rem rgba(30, 136, 229, 0.25);
+    background: rgba(255, 255, 255, 1);
+}
+
+.form-select {
+    border: 2px solid rgba(30, 136, 229, 0.1);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.form-select:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 0.2rem rgba(30, 136, 229, 0.25);
+    background: rgba(255, 255, 255, 1);
+}
+
+/* Enhanced Analysis Type Cards */
+.analysis-type-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(245, 247, 250, 0.9) 100%);
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.analysis-type-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-success), var(--color-warning), var(--color-insight));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.analysis-type-card:hover::before {
+    opacity: 1;
+}
+
+.analysis-type-card:hover {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(245, 247, 250, 0.95) 100%);
+    border-color: var(--color-primary);
+    box-shadow: 0 16px 48px rgba(30, 136, 229, 0.2);
 }
