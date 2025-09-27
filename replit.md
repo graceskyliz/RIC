@@ -36,9 +36,15 @@ Preferred communication style: Simple, everyday language.
 - **Educational Metrics**: Specialized calculations for filler word detection and speech quality
 
 #### RIC AI Agent (`ric_agent.py`)
-- **Model**: GPT-4o (latest OpenAI model as of May 2024)
+- **Model**: GPT-4-turbo (updated from GPT-4o as requested)
 - **Feedback Generation**: Structured JSON responses for educational recommendations
 - **Educational Focus**: Specialized prompts for classroom instruction analysis
+
+#### Lesson Plan Agent (`lesson_plan_agent.py`)
+- **Model**: GPT-4-turbo (updated from GPT-4o as requested)  
+- **Evaluation Framework**: Official Ministry of Education criteria (12 ministerial standards)
+- **Assessment Structure**: Ficha de Observación Planificación de la Sesión oficial
+- **Standards Compliance**: Evaluates according to national curriculum requirements
 
 #### Data Models (`models.py`)
 - **AudioAnalysis**: Primary entity storing upload metadata, transcription results, prosodic data, and AI feedback
