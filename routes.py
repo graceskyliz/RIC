@@ -11,7 +11,7 @@ from pdf_processor import PDFProcessor
 from lesson_plan_agent import LessonPlanAgent
 import json
 
-AUDIO_EXTENSIONS = {'mp3', 'wav', 'm4a', 'ogg', 'flac'}
+AUDIO_EXTENSIONS = {'mp3', 'wav', 'm4a', 'ogg', 'flac', 'webm'}
 PDF_EXTENSIONS = {'pdf'}
 ALLOWED_EXTENSIONS = AUDIO_EXTENSIONS | PDF_EXTENSIONS
 
