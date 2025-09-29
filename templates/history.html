@@ -160,7 +160,7 @@
                                                     <div class="d-flex align-items-center">
                                                         <div class="progress me-2" style="width: 60px; height: 8px; border-radius: 4px;">
                                                             <div class="progress-bar" 
-                                                                 style="width: {{ feedback.overall_score }}%; background: {{ 'linear-gradient(90deg, #9da0e5, #424453)' if feedback.overall_score >= 80 else 'linear-gradient(90deg, #fbceb1, #9da0e5)' if feedback.overall_score >= 60 else 'linear-gradient(90deg, #f6b5b7, #424453)' }}; border-radius: 4px;">
+                                                                 style="width: {{ feedback.overall_score }}%; background: {{ 'linear-gradient(90deg, #4FC3F7, #424453)' if feedback.overall_score >= 80 else 'linear-gradient(90deg, #fbceb1, #4FC3F7)' if feedback.overall_score >= 60 else 'linear-gradient(90deg, #f6b5b7, #424453)' }}; border-radius: 4px;">
                                                             </div>
                                                         </div>
                                                         <span class="fw-medium score-text">{{ feedback.overall_score }}/100</span>
@@ -277,7 +277,7 @@
 /* Enhance metric cards */
 .metric-card {
     background: linear-gradient(135deg, #424453 0%, #2f313e 100%);
-    border: 2px solid #9da0e5;
+    border: 2px solid #4FC3F7;
     border-radius: var(--border-radius);
     padding: 1.5rem;
     text-align: center;
@@ -287,30 +287,30 @@
 
 .metric-card:hover {
     transform: translateY(-2px);
-    border-color: #9da0e5;
-    box-shadow: 0 8px 32px rgba(157, 160, 229, 0.3);
+    border-color: #4FC3F7;
+    box-shadow: 0 8px 32px rgba(79, 195, 247, 0.3);
 }
 
 .total-analysis-icon i {
-    color: #9da0e5 !important;
+    color: #4FC3F7 !important;
     width: 48px;
     height: 48px;
 }
 
 .completed-icon i {
-    color: #9da0e5 !important;
+    color: #4FC3F7 !important;
     width: 48px;
     height: 48px;
 }
 
 .processing-icon i {
-    color: #9da0e5 !important;
+    color: #4FC3F7 !important;
     width: 48px;
     height: 48px;
 }
 
 .error-icon i {
-    color: #9da0e5 !important;
+    color: #4FC3F7 !important;
     width: 48px;
     height: 48px;
 }
@@ -339,7 +339,7 @@
 }
 
 .card.border-info .card-header {
-    background: linear-gradient(135deg, #9da0e5 0%, rgba(157, 160, 229, 0.9) 100%) !important;
+    background: linear-gradient(135deg, #4FC3F7 0%, rgba(79, 195, 247, 0.9) 100%) !important;
     color: #ffffff !important;
 }
 
@@ -372,49 +372,49 @@
 
 /* Subject and grade badges */
 .badge[class*="bg-subject-"] {
-    background: #9da0e5 !important;
+    background: #4FC3F7 !important;
     color: #ffffff !important;
 }
 
 .badge.bg-grade {
-    background: #9da0e5 !important;
+    background: #4FC3F7 !important;
     color: #ffffff !important;
 }
 
 /* Status badges */
 .status-badge-success {
-    background: #9da0e5 !important;
+    background: #4FC3F7 !important;
     color: #ffffff !important;
 }
 
 .status-badge-danger {
-    background: #9da0e5 !important;
+    background: #4FC3F7 !important;
     color: #ffffff !important;
 }
 
 .status-badge-warning {
-    background: #9da0e5 !important;
+    background: #4FC3F7 !important;
     color: #ffffff !important;
 }
 
 .status-badge-secondary {
-    background: #9da0e5 !important;
+    background: #4FC3F7 !important;
     color: #ffffff !important;
 }
 
 /* Button enhancements */
 .btn-soft-primary {
-    background: rgba(157, 160, 229, 0.2);
-    border: 1px solid #9da0e5;
-    color: #9da0e5;
+    background: rgba(79, 195, 247, 0.2);
+    border: 1px solid #4FC3F7;
+    color: #4FC3F7;
     transition: all 0.3s ease;
 }
 
 .btn-soft-primary:hover {
-    background: #9da0e5;
+    background: #4FC3F7;
     color: #ffffff;
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(157, 160, 229, 0.3);
+    box-shadow: 0 4px 12px rgba(79, 195, 247, 0.3);
 }
 
 /* Table enhancements */
@@ -463,12 +463,12 @@
 
 /* Table header styling */
 .table-light {
-    background-color: #9da0e5 !important;
+    background-color: #4FC3F7 !important;
     color: #ffffff !important;
 }
 
 .table-light th {
-    background-color: #9da0e5 !important;
+    background-color: #4FC3F7 !important;
     color: #ffffff !important;
     border-color: #424453 !important;
 }
@@ -480,7 +480,7 @@
 }
 
 .table tbody tr:hover {
-    background-color: rgba(157, 160, 229, 0.1) !important;
+    background-color: rgba(79, 195, 247, 0.1) !important;
 }
 
 .table tbody td {

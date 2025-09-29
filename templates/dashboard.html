@@ -16,7 +16,7 @@
     
     /* Override navbar for dashboard */
     .navbar-dark.bg-primary {
-        background: linear-gradient(135deg, #424453 0%, #9da0e5 100%) !important;
+        background: linear-gradient(135deg, #424453 0%, #4FC3F7 100%) !important;
     }
     
     /* Override footer */
@@ -30,19 +30,19 @@
     }
     
     .stat-card {
-        background: linear-gradient(135deg, #424453 0%, #9da0e5 100%) !important;
+        background: linear-gradient(135deg, #424453 0%, #4FC3F7 100%) !important;
         color: #ffffff !important;
         border-radius: 15px;
         padding: 1.5rem;
         text-align: center;
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
         transition: transform 0.3s ease;
-        border: 1px solid rgba(157, 160, 229, 0.2);
+        border: 1px solid rgba(79, 195, 247, 0.2);
     }
     
     .stat-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 15px 35px rgba(157, 160, 229, 0.2);
+        box-shadow: 0 15px 35px rgba(79, 195, 247, 0.2);
     }
     
     .stat-number {
@@ -64,7 +64,7 @@
         border-radius: 15px;
         padding: 1.5rem;
         box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-        border: 1px solid rgba(157, 160, 229, 0.2);
+        border: 1px solid rgba(79, 195, 247, 0.2);
         margin-bottom: 2rem;
     }
     
@@ -76,7 +76,7 @@
     }
     
     .progress-header {
-        background: linear-gradient(135deg, #424453 0%, #9da0e5 100%);
+        background: linear-gradient(135deg, #424453 0%, #4FC3F7 100%);
         color: #ffffff;
         padding: 3rem 0;
         margin-bottom: 3rem;
@@ -104,7 +104,7 @@
     }
     
     .spinner-border {
-        color: #9da0e5 !important;
+        color: #4FC3F7 !important;
     }
     
     .recent-item {
@@ -123,7 +123,7 @@
     }
     
     .recent-item.audio {
-        border-left-color: #9da0e5;
+        border-left-color: #4FC3F7;
     }
     
     .recent-item.pdf {
@@ -138,9 +138,9 @@
     }
     
     .status-completed {
-        background: rgba(157, 160, 229, 0.2);
-        color: #9da0e5;
-        border: 1px solid #9da0e5;
+        background: rgba(79, 195, 247, 0.2);
+        color: #4FC3F7;
+        border: 1px solid #4FC3F7;
     }
     
     .status-processing {
@@ -369,11 +369,11 @@ async function loadDashboardData() {
 function updateMetrics(stats) {
     const metricsGrid = document.getElementById('metricsGrid');
     metricsGrid.innerHTML = `
-        <div class="stat-card" style="background: linear-gradient(135deg, #424453, #9da0e5);">
+        <div class="stat-card" style="background: linear-gradient(135deg, #424453, #4FC3F7);">
             <div class="stat-number">${stats.total_analyses}</div>
             <div class="stat-label">Total Análisis</div>
         </div>
-        <div class="stat-card" style="background: linear-gradient(135deg, #9da0e5, #fbceb1);">
+        <div class="stat-card" style="background: linear-gradient(135deg, #4FC3F7, #fbceb1);">
             <div class="stat-number">${stats.completed_analyses}</div>
             <div class="stat-label">Completados</div>
         </div>
@@ -381,7 +381,7 @@ function updateMetrics(stats) {
             <div class="stat-number">${stats.processing_analyses}</div>
             <div class="stat-label">En Proceso</div>
         </div>
-        <div class="stat-card" style="background: linear-gradient(135deg, #f6b5b7, #9da0e5);">
+        <div class="stat-card" style="background: linear-gradient(135deg, #f6b5b7, #4FC3F7);">
             <div class="stat-number">${stats.success_rate}%</div>
             <div class="stat-label">Tasa de Éxito</div>
         </div>
@@ -389,7 +389,7 @@ function updateMetrics(stats) {
             <div class="stat-number">${stats.audio_analyses}</div>
             <div class="stat-label">Análisis de Audio</div>
         </div>
-        <div class="stat-card" style="background: linear-gradient(135deg, #9da0e5, #424453);">
+        <div class="stat-card" style="background: linear-gradient(135deg, #4FC3F7, #424453);">
             <div class="stat-number">${stats.pdf_analyses}</div>
             <div class="stat-label">Análisis de PDF</div>
         </div>
@@ -410,7 +410,7 @@ function updateStatusChart(statusData) {
             labels: statusData.map(item => item.name),
             datasets: [{
                 data: statusData.map(item => item.count),
-                backgroundColor: ['#9da0e5', '#fbceb1', '#f6b5b7', '#424453'],
+                backgroundColor: ['#4FC3F7', '#fbceb1', '#f6b5b7', '#424453'],
                 borderWidth: 2,
                 borderColor: '#2f313e'
             }]
@@ -442,8 +442,8 @@ function updateActivityChart(activityData) {
             datasets: [{
                 label: 'Análisis por día',
                 data: activityData.map(item => item.count),
-                borderColor: '#9da0e5',
-                backgroundColor: 'rgba(157, 160, 229, 0.1)',
+                borderColor: '#4FC3F7',
+                backgroundColor: 'rgba(79, 195, 247, 0.1)',
                 tension: 0.4,
                 fill: true
             }]

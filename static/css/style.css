@@ -2,12 +2,12 @@
 
 :root {
     /* Nueva paleta de colores */
-    --color-primary: #9da0e5;    /* Púrpura claro principal */
+    --color-primary: #4FC3F7;    /* Azul celeste principal */
     --color-primary-dark: #424453;
     --color-primary-light: #fbceb1;
 
     /* Éxito / progreso */
-    --color-success: #9da0e5;    /* Púrpura para progreso */
+    --color-success: #4FC3F7;    /* Azul celeste para progreso */
     --color-success-light: #fbceb1;
 
     /* Advertencia / mejoras sugeridas */
@@ -19,7 +19,7 @@
     --color-danger-light: #f6b5b7;
 
     /* Insights / creatividad */
-    --color-insight: #9da0e5;    /* Púrpura para análisis */
+    --color-insight: #4FC3F7;    /* Azul celeste para análisis */
     --color-insight-light: #fbceb1;
 
     /* Neutros y fondos */
@@ -31,7 +31,7 @@
     --color-border: #424453;    /* Bordes */
 
     /* Botones CTA */
-    --color-cta: #9da0e5;       /* Púrpura para botones */
+    --color-cta: #4FC3F7;       /* Azul celeste para botones */
     --color-cta-hover: #424453;
     
     /* Legacy compatibility (mapped to new colors) */
@@ -115,7 +115,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .card-header {
     background: rgba(66, 68, 83, 0.95) !important;
-    border-bottom: 1px solid rgba(157, 160, 229, 0.1);
+    border-bottom: 1px solid rgba(79, 195, 247, 0.1);
     border-radius: var(--border-radius) var(--border-radius) 0 0;
 }
 
@@ -127,30 +127,30 @@ h1, h2, h3, h4, h5, h6 {
 
 .card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 16px 40px rgba(157, 160, 229, 0.2), 0 8px 16px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 16px 40px rgba(79, 195, 247, 0.2), 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
 /* Upload Area */
 .upload-area {
-    border: 2px dashed rgba(157, 160, 229, 0.3);
+    border: 2px dashed rgba(79, 195, 247, 0.3);
     border-radius: var(--border-radius);
     padding: 3rem 2rem;
     text-align: center;
     cursor: pointer;
     transition: all 0.3s ease;
-    background: linear-gradient(135deg, rgba(157, 160, 229, 0.08) 0%, rgba(251, 206, 177, 0.05) 100%);
+    background: linear-gradient(135deg, rgba(79, 195, 247, 0.08) 0%, rgba(251, 206, 177, 0.05) 100%);
 }
 
 .upload-area:hover {
     border-color: var(--color-primary);
-    background: linear-gradient(135deg, rgba(157, 160, 229, 0.05) 0%, rgba(157, 160, 229, 0.02) 100%);
+    background: linear-gradient(135deg, rgba(79, 195, 247, 0.05) 0%, rgba(79, 195, 247, 0.02) 100%);
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(157, 160, 229, 0.1);
+    box-shadow: 0 8px 25px rgba(79, 195, 247, 0.1);
 }
 
 .upload-area.dragover {
     border-color: var(--color-primary);
-    background: linear-gradient(135deg, rgba(157, 160, 229, 0.1) 0%, rgba(157, 160, 229, 0.05) 100%);
+    background: linear-gradient(135deg, rgba(79, 195, 247, 0.1) 0%, rgba(79, 195, 247, 0.05) 100%);
 }
 
 .upload-icon {
@@ -171,20 +171,20 @@ h1, h2, h3, h4, h5, h6 {
     display: inline-flex;
     align-items: center;
     padding: 0.5rem 1rem;
-    background: linear-gradient(135deg, rgba(157, 160, 229, 0.15) 0%, rgba(251, 206, 177, 0.1) 100%);
+    background: linear-gradient(135deg, rgba(79, 195, 247, 0.15) 0%, rgba(251, 206, 177, 0.1) 100%);
     color: var(--color-primary);
     border-radius: 20px;
     font-size: 0.875rem;
     font-weight: 500;
-    border: 1px solid rgba(157, 160, 229, 0.3);
+    border: 1px solid rgba(79, 195, 247, 0.3);
     transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(157, 160, 229, 0.15);
+    box-shadow: 0 2px 8px rgba(79, 195, 247, 0.15);
 }
 
 .feature-badge:hover {
-    background: rgba(157, 160, 229, 0.2);
+    background: rgba(79, 195, 247, 0.2);
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(157, 160, 229, 0.2);
+    box-shadow: 0 4px 12px rgba(79, 195, 247, 0.2);
 }
 
 /* Feature Icons */
@@ -462,7 +462,7 @@ h1, h2, h3, h4, h5, h6 {
     
     .upload-area {
         background-color: #424453 !important;
-        border-color: #9da0e5 !important;
+        border-color: #4FC3F7 !important;
     }
     
     .transcription-text {
@@ -496,12 +496,12 @@ h1, h2, h3, h4, h5, h6 {
     background: linear-gradient(135deg, rgba(157, 160, 229, 0.15) 0%, rgba(251, 206, 177, 0.08) 100%);
     border-radius: var(--border-radius);
     padding: 1.5rem;
-    border: 1px solid rgba(157, 160, 229, 0.2);
-    box-shadow: 0 4px 20px rgba(157, 160, 229, 0.1);
+    border: 1px solid rgba(79, 195, 247, 0.2);
+    box-shadow: 0 4px 20px rgba(79, 195, 247, 0.1);
 }
 
 .lesson-planning-context {
-    background: linear-gradient(135deg, rgba(251, 206, 177, 0.12) 0%, rgba(157, 160, 229, 0.06) 100%);
+    background: linear-gradient(135deg, rgba(251, 206, 177, 0.12) 0%, rgba(79, 195, 247, 0.06) 100%);
     border-radius: var(--border-radius);
     padding: 1.5rem;
     border: 1px solid rgba(251, 206, 177, 0.2);
@@ -526,8 +526,8 @@ h1, h2, h3, h4, h5, h6 {
     background: linear-gradient(135deg, rgba(66, 68, 83, 0.9) 0%, rgba(47, 49, 62, 0.9) 100%);
     border-radius: var(--border-radius);
     padding: 1rem;
-    border: 1px solid rgba(157, 160, 229, 0.1);
-    box-shadow: 0 2px 16px rgba(157, 160, 229, 0.08);
+    border: 1px solid rgba(79, 195, 247, 0.1);
+    box-shadow: 0 2px 16px rgba(79, 195, 247, 0.08);
 }
 
 /* Educational Theme Colors */
