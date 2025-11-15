@@ -11,7 +11,7 @@ class ClassroomAnalysis(db.Model):
     analysis_timestamp = db.Column(db.DateTime)
     
     # Analysis type
-    analysis_type = db.Column(db.String(20), default='audio')  # 'audio' or 'pdf'
+    analysis_type = db.Column(db.String(20), default='audio')  # 'audio', 'pdf' or 'video'
     
     # Educational context (shared)
     subject = db.Column(db.String(100))  # Materia/asignatura
@@ -133,6 +133,10 @@ class ClassroomAnalysis(db.Model):
     def is_pdf_analysis(self):
         """Check if this is a PDF analysis"""
         return self.analysis_type == 'pdf'
+
+    def is_video_analysis(self):
+        """Check if this is a video analysis"""
+        return self.analysis_type == 'video'
 
 
 # Keep backward compatibility alias

@@ -19,155 +19,155 @@
     
     <!-- Global Color Palette Override -->
     <style>
-        /* Force color palette across all pages */
+        /* Force color palette across all pages using CSS variables */
         body, html {
-            background-color: #2f313e !important;
-            color: #ffffff !important;
+            background-color: var(--color-bg) !important;
+            color: var(--color-text) !important;
         }
-        
+
         /* Override Bootstrap navigation */
         .navbar-dark.bg-primary {
-            background: linear-gradient(135deg, #424453 0%, #4FC3F7 100%) !important;
+            background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%) !important;
         }
-        
+
         .navbar-dark .navbar-nav .nav-link {
-            color: #ffffff !important;
+            color: var(--color-text) !important;
         }
-        
+
         .navbar-dark .navbar-nav .nav-link:hover {
-            color: #4FC3F7 !important;
+            color: var(--color-primary) !important;
         }
-        
+
         .navbar-brand {
-            color: #4FC3F7 !important;
+            color: var(--color-primary) !important;
         }
-        
+
         /* Override Bootstrap footer */
         footer.bg-light {
-            background: #424453 !important;
-            color: #ffffff !important;
+            background: var(--color-bg-alt) !important;
+            color: var(--color-text) !important;
         }
-        
+
         footer.bg-light .text-muted {
-            color: #ffffff !important;
+            color: var(--color-text-secondary) !important;
         }
-        
+
         /* Override Bootstrap alerts */
         .alert {
-            background-color: #424453 !important;
-            border-color: #4FC3F7 !important;
-            color: #ffffff !important;
+            background-color: var(--color-surface) !important;
+            border-color: var(--color-primary) !important;
+            color: var(--color-text) !important;
         }
-        
+
         .alert-success {
-            background-color: rgba(79, 195, 247, 0.2) !important;
-            border-color: #4FC3F7 !important;
-            color: #ffffff !important;
+            background-color: var(--color-success-light) !important;
+            border-color: var(--color-success) !important;
+            color: var(--color-text) !important;
         }
-        
+
         .alert-danger {
-            background-color: rgba(246, 181, 183, 0.2) !important;
-            border-color: #f6b5b7 !important;
-            color: #ffffff !important;
+            background-color: var(--color-danger-light) !important;
+            border-color: var(--color-danger) !important;
+            color: var(--color-text) !important;
         }
-        
+
         .alert-warning {
-            background-color: rgba(251, 206, 177, 0.2) !important;
-            border-color: #fbceb1 !important;
-            color: #ffffff !important;
+            background-color: var(--color-warning-light) !important;
+            border-color: var(--color-warning) !important;
+            color: var(--color-text) !important;
         }
-        
-        /* Override all buttons to use #4FC3F7 */
+
+        /* Override all buttons to use primary */
         .btn-primary, .btn-success, .btn-info, .btn-warning {
-            background-color: #4FC3F7 !important;
-            border-color: #4FC3F7 !important;
-            color: #ffffff !important;
+            background-color: var(--color-primary) !important;
+            border-color: var(--color-primary) !important;
+            color: var(--color-text) !important;
         }
-        
+
         .btn-primary:hover, .btn-success:hover, .btn-info:hover, .btn-warning:hover {
-            background-color: #424453 !important;
-            border-color: #424453 !important;
-            color: #ffffff !important;
+            background-color: var(--color-primary-dark) !important;
+            border-color: var(--color-primary-dark) !important;
+            color: var(--color-text) !important;
         }
-        
+
         .btn-outline-primary, .btn-outline-secondary {
-            color: #4FC3F7 !important;
-            border-color: #4FC3F7 !important;
+            color: var(--color-primary) !important;
+            border-color: var(--color-primary) !important;
             background-color: transparent !important;
         }
-        
+
         .btn-outline-primary:hover, .btn-outline-secondary:hover {
-            background-color: #4FC3F7 !important;
-            border-color: #4FC3F7 !important;
-            color: #ffffff !important;
+            background-color: var(--color-primary) !important;
+            border-color: var(--color-primary) !important;
+            color: var(--color-text) !important;
         }
-        
+
         /* Banner colors */
         .badge, .bg-primary, .bg-success, .bg-info, .bg-warning {
-            background-color: #4FC3F7 !important;
-            color: #ffffff !important;
+            background-color: var(--color-primary) !important;
+            color: var(--color-text) !important;
         }
-        
+
         /* Card headers and panels */
         .card-header.bg-primary, .card-header.bg-success, .card-header.bg-info, .card-header.bg-warning {
-            background-color: #4FC3F7 !important;
-            color: #ffffff !important;
+            background-color: var(--color-primary) !important;
+            color: var(--color-text) !important;
         }
-        
+
         /* Text colors for all text elements */
         p, span, small, li, td, th, label, .text-muted, .small {
-            color: #ffffff !important;
+            color: var(--color-text) !important;
         }
-        
+
         /* Specific overrides for headings */
         h1, h2, h3, h4, h5, h6 {
-            color: #ffffff !important;
+            color: var(--color-text) !important;
         }
-        
+
         /* Logo and brand colors */
         .navbar-brand, .logo, .brand-logo {
-            color: #4FC3F7 !important;
+            color: var(--color-primary) !important;
         }
-        
+
         /* Progress bars */
         .progress-bar {
-            background-color: #4FC3F7 !important;
-            color: #ffffff !important;
+            background-color: var(--color-primary) !important;
+            color: var(--color-text) !important;
         }
-        
+
         /* Form overrides */
         .form-control {
-            background-color: #2f313e !important;
-            border-color: #4FC3F7 !important;
-            color: #ffffff !important;
+            background-color: var(--color-bg) !important;
+            border-color: var(--color-primary) !important;
+            color: var(--color-text) !important;
         }
-        
+
         .form-control:focus {
-            background-color: #2f313e !important;
-            border-color: #4FC3F7 !important;
-            color: #ffffff !important;
-            box-shadow: 0 0 0 0.2rem rgba(79, 195, 247, 0.25) !important;
+            background-color: var(--color-bg) !important;
+            border-color: var(--color-primary) !important;
+            color: var(--color-text) !important;
+            box-shadow: 0 0 0 0.2rem rgba(0,194,168,0.18) !important;
         }
-        
+
         .form-label {
-            color: #ffffff !important;
+            color: var(--color-text) !important;
         }
-        
+
         /* Card overrides */
         .card {
-            background-color: #424453 !important;
-            border-color: #4FC3F7 !important;
+            background-color: var(--color-surface) !important;
+            border-color: var(--color-primary) !important;
         }
-        
+
         .card-header {
-            background-color: #424453 !important;
-            color: #ffffff !important;
-            border-bottom-color: #9da0e5 !important;
+            background-color: var(--color-surface) !important;
+            color: var(--color-text) !important;
+            border-bottom-color: var(--color-primary-light) !important;
         }
-        
+
         .card-body {
-            background-color: #424453 !important;
-            color: #ffffff !important;
+            background-color: var(--color-surface) !important;
+            color: var(--color-text) !important;
         }
     </style>
     
@@ -182,17 +182,30 @@
                 <span class="fw-bold">RIC</span>
                 <span class="ms-2" id="ricTextRotator" style="color: #fbceb1; opacity: 0.95;">Coach de Enseñanza IA</span>
             </a>
-            
-            <div class="navbar-nav ms-auto">
-                <a class="nav-link" href="{{ url_for('index') }}">
-                    <i data-feather="home" class="me-1"></i> Inicio
-                </a>
-                <a class="nav-link" href="{{ url_for('dashboard') }}">
-                    <i data-feather="bar-chart-2" class="me-1"></i> Dashboard
-                </a>
-                <a class="nav-link" href="{{ url_for('history') }}">
-                    <i data-feather="clock" class="me-1"></i> Historial
-                </a>
+
+            <!-- Toggler for mobile -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#ricNavbar" aria-controls="ricNavbar" aria-expanded="false" aria-label="Alternar navegación">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="ricNavbar">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('index') }}">
+                            <i data-feather="home" class="me-1"></i> Inicio
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('dashboard') }}">
+                            <i data-feather="bar-chart-2" class="me-1"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('history') }}">
+                            <i data-feather="clock" class="me-1"></i> Historial
+                        </a>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>

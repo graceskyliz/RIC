@@ -24,7 +24,7 @@
             
             <div class="row g-4">
                 <!-- Audio Analysis Option -->
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="card h-100 analysis-type-card audio-analysis-card" onclick="window.location.href='{{ url_for('upload_audio_page') }}'">
                         <div class="card-body text-center p-5">
                             <div class="analysis-icon mb-4">
@@ -51,16 +51,49 @@
                                 </div>
                             </div>
                             
-                            <div class="btn btn-primary btn-lg">
+                            <a href="{{ url_for('upload_audio_page') }}" class="btn btn-primary btn-lg" role="button" aria-label="Analizar Audio">
                                 <i data-feather="play" class="me-2"></i>
                                 Analizar Audio
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Video Analysis Option -->
+                <div class="col-md-4">
+                    <div class="card h-100 analysis-type-card video-analysis-card" onclick="window.location.href='{{ url_for('upload_video_page') }}'">
+                        <div class="card-body text-center p-5">
+                            <div class="analysis-icon mb-4">
+                                <i data-feather="video" class="analysis-main-icon"></i>
                             </div>
+                            <h3 class="card-title text-primary mb-3">Análisis de Video</h3>
+                            <p class="card-text text-muted mb-4">
+                                Sube un video de tu clase (.mp4) hasta 15 minutos. Extraeremos el audio y proporcionaremos feedback pedagógico.
+                            </p>
+                            <div class="features-list mb-4">
+                                <div class="feature-item">
+                                    <i data-feather="film" class="me-2 text-success"></i>
+                                    <span>Extracción de audio y transcripción</span>
+                                </div>
+                                <div class="feature-item">
+                                    <i data-feather="speaker" class="me-2 text-success"></i>
+                                    <span>Análisis prosódico y métricas de voz</span>
+                                </div>
+                                <div class="feature-item">
+                                    <i data-feather="users" class="me-2 text-success"></i>
+                                    <span>Retroalimentación adaptada por grado</span>
+                                </div>
+                            </div>
+                            <a href="{{ url_for('upload_video_page') }}" class="btn btn-info btn-lg" role="button">
+                                <i data-feather="upload" class="me-2"></i>
+                                Subir Video
+                            </a>
                         </div>
                     </div>
                 </div>
 
                 <!-- PDF Analysis Option -->
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="card h-100 analysis-type-card pdf-analysis-card" onclick="window.location.href='{{ url_for('upload_pdf_page') }}'">
                         <div class="card-body text-center p-5">
                             <div class="analysis-icon mb-4">
@@ -87,10 +120,10 @@
                                 </div>
                             </div>
                             
-                            <div class="btn btn-warning btn-lg">
+                            <a href="{{ url_for('upload_pdf_page') }}" class="btn btn-warning btn-lg" role="button" aria-label="Analizar PDF">
                                 <i data-feather="upload" class="me-2"></i>
                                 Analizar PDF
-                            </div>
+                            </a>
                         </div>
                     </div>
                 </div>

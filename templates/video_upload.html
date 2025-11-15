@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+
+{% block title %}RIC - Análisis de Video{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Inicio</a></li>
+            <li class="breadcrumb-item active">Análisis de Video</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow-lg video-upload-card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">
+                        <i data-feather="video" class="me-2"></i>
+                        Subir Video de Clase (.mp4)
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data" id="videoUploadForm">
+                        <div class="educational-context-section mb-4">
+                            <h6 class="text-muted mb-3"><i data-feather="info" class="me-2"></i>Contexto Educativo</h6>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="subject" class="form-label">Materia/Asignatura</label>
+                                    <select class="form-select" id="subject" name="subject" required>
+                                        <option value="">Selecciona una materia</option>
+                                        <option value="Matemáticas">Matemáticas</option>
+                                        <option value="Español">Español / Lenguaje</option>
+                                        <option value="Ciencias Naturales">Ciencias Naturales</option>
+                                        <option value="Ciencias Sociales">Ciencias Sociales / Historia</option>
+                                        <option value="Inglés">Inglés</option>
+                                        <option value="Otro">Otra materia</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="grade_level" class="form-label">Grado Escolar</label>
+                                    <select class="form-select" id="grade_level" name="grade_level" required>
+                                        <option value="">Selecciona el grado</option>
+                                        <option value="Primaria">Primaria</option>
+                                        <option value="Secundaria">Secundaria</option>
+                                        <option value="Preparatoria">Preparatoria</option>
+                                        <option value="Universidad">Universidad</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row g-3 mt-2">
+                                <div class="col-12">
+                                    <label for="lesson_topic" class="form-label">Tema de la Clase</label>
+                                    <input type="text" class="form-control" id="lesson_topic" name="lesson_topic" placeholder="Tema de la clase" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="video-upload-section mb-3">
+                            <h6 class="text-muted mb-3"><i data-feather="upload" class="me-2"></i>Video (.mp4) - máximo 15 minutos</h6>
+
+                            <div class="upload-area mb-3" id="uploadAreaVideo" onclick="document.getElementById('videoFile').click()">
+                                <input type="file" id="videoFile" name="video_file" accept=".mp4,video/mp4" style="display: none;">
+                                <i data-feather="upload-cloud" class="upload-icon mb-3"></i>
+                                <h6>Arrastra tu video aquí</h6>
+                                <p class="text-muted mb-3">o haz clic para seleccionar</p>
+                                <div class="upload-info">
+                                    <small class="text-muted">Formato: MP4. Duración máxima: 15 minutos. Tamaño máximo: 500 MB</small>
+                                </div>
+                            </div>
+
+                            <div class="file-selected d-none" id="fileSelectedVideo">
+                                <div class="selected-file-info p-3 bg-light rounded">
+                                    <i data-feather="file" class="me-2"></i>
+                                    <span id="fileNameVideo"></span>
+                                    <button type="button" class="btn btn-sm btn-outline-danger ms-2" id="removeFileBtnVideo">
+                                        <i data-feather="x"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary btn-lg" id="submitBtnVideo" disabled>
+                                <i data-feather="send" class="me-2"></i>
+                                Iniciar Análisis de Video
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card recent-video-card">
+                <div class="card-header recent-video-header">
+                    <h6 class="card-title mb-0"><i data-feather="clock" class="me-2"></i>Videos Recientes</h6>
+                </div>
+                <div class="card-body">
+                    {% if recent_analyses %}
+                        {% for analysis in recent_analyses %}
+                        <div class="analysis-item mb-3">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1">{{ analysis.lesson_topic or 'Análisis de video' }}</h6>
+                                    <p class="text-muted small mb-1">{{ analysis.subject or 'General' }} - {{ analysis.grade_level }}</p>
+                                    <p class="text-muted small">{{ analysis.upload_timestamp.strftime('%d/%m/%Y %H:%M') }}</p>
+                                </div>
+                                <a href="{{ url_for('analyze', analysis_id=analysis.id) }}" class="btn btn-sm btn-outline-primary">Ver</a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-muted text-center">No hay videos recientes.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.video-upload-card { box-shadow: 0 12px 48px rgba(0,0,0,0.2); }
+.upload-area { cursor: pointer; }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const videoFile = document.getElementById('videoFile');
+    const submitBtn = document.getElementById('submitBtnVideo');
+    const fileSelected = document.getElementById('fileSelectedVideo');
+    const fileNameSpan = document.getElementById('fileNameVideo');
+    const removeBtn = document.getElementById('removeFileBtnVideo');
+
+    document.getElementById('uploadAreaVideo').addEventListener('click', () => videoFile.click());
+
+    videoFile.addEventListener('change', (e) => {
+        const f = e.target.files[0];
+        if (!f) return;
+        // Basic client-side length check using video element
+        const url = URL.createObjectURL(f);
+        const v = document.createElement('video');
+        v.preload = 'metadata';
+        v.src = url;
+        v.onloadedmetadata = function() {
+            URL.revokeObjectURL(url);
+            const duration = v.duration;
+            if (duration && duration > 15 * 60) {
+                alert('El video excede la duración máxima de 15 minutos.');
+                videoFile.value = '';
+                submitBtn.disabled = true;
+                return;
+            }
+            fileNameSpan.textContent = f.name + ' (' + Math.round(f.size/1024/1024) + ' MB)';
+            fileSelected.classList.remove('d-none');
+            submitBtn.disabled = false;
+        }
+    });
+
+    removeBtn.addEventListener('click', () => {
+        videoFile.value = '';
+        fileSelected.classList.add('d-none');
+        submitBtn.disabled = true;
+    });
+});
+</script>
+{% endblock %}

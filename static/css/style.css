@@ -1,38 +1,39 @@
 /* RIC - Reflective Instruction Coach Styles */
 
 :root {
-    /* Nueva paleta de colores */
-    --color-primary: #4FC3F7;    /* Azul celeste principal */
-    --color-primary-dark: #424453;
-    --color-primary-light: #fbceb1;
+    /* Updated modern palette */
+    --color-primary: #00C2A8;       /* Teal (main) */
+    --color-primary-dark: #073B3A;  /* Dark teal */
+    --color-primary-light: #FFB86B; /* Warm peach accent */
 
     /* Éxito / progreso */
-    --color-success: #4FC3F7;    /* Azul celeste para progreso */
-    --color-success-light: #fbceb1;
+    --color-success: #7CE3B6;       /* Soft mint */
+    --color-success-light: rgba(124,227,182,0.12);
 
     /* Advertencia / mejoras sugeridas */
-    --color-warning: #fbceb1;    /* Melocotón suave */
-    --color-warning-light: #fbceb1;
+    --color-warning: #FFB86B;      /* Peach */
+    --color-warning-light: rgba(255,184,107,0.12);
 
     /* Error / crítica */
-    --color-danger: #f6b5b7;     /* Rosa suave para errores */
-    --color-danger-light: #f6b5b7;
+    --color-danger: #FF6B6B;       /* Coral */
+    --color-danger-light: rgba(255,107,107,0.12);
 
     /* Insights / creatividad */
-    --color-insight: #4FC3F7;    /* Azul celeste para análisis */
-    --color-insight-light: #fbceb1;
+    --color-insight: #00A3FF;      /* Bright sky */
+    --color-insight-light: rgba(0,163,255,0.08);
 
     /* Neutros y fondos */
-    --color-bg: #2f313e;        /* Fondo principal oscuro */
-    --color-bg-alt: #424453;    /* Fondo alternativo */
-    --color-surface: #424453;   /* Superficie de tarjetas */
-    --color-text: #ffffff;      /* Texto principal blanco */
-    --color-text-secondary: #ffffff;  /* Texto secundario blanco */
-    --color-border: #424453;    /* Bordes */
+    /* Backgrounds: lighten slightly to avoid grey cast */
+    --color-bg: #072635;           /* Deep teal-blue (darker but richer) */
+    --color-bg-alt: #0b3550;       /* Slightly lighter blue for gradients */
+    --color-surface: rgba(255,255,255,0.03); /* Slightly lighter card surface */
+    --color-text: #F1F5F9;         /* Softer off-white text for better warmth */
+    --color-text-secondary: rgba(248,250,252,0.85);
+    --color-border: rgba(255,255,255,0.04);
 
     /* Botones CTA */
-    --color-cta: #4FC3F7;       /* Azul celeste para botones */
-    --color-cta-hover: #424453;
+    --color-cta: #00C2A8;
+    --color-cta-hover: #073B3A;
     
     /* Legacy compatibility (mapped to new colors) */
     --primary-color: var(--color-primary);
@@ -55,7 +56,8 @@
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     color: var(--color-text);
-    background: linear-gradient(135deg, #2f313e 0%, #424453 50%, #2f313e 100%);
+    background: linear-gradient(135deg, var(--color-bg) 0%, var(--color-bg-alt) 60%);
+    background-attachment: fixed;
     min-height: 100vh;
     line-height: 1.6;
 }
@@ -102,14 +104,15 @@ h1, h2, h3, h4, h5, h6 {
 .card {
     border: none;
     border-radius: var(--border-radius);
-    box-shadow: 0 8px 32px rgba(47, 49, 62, 0.12);
+    box-shadow: 0 10px 30px rgba(3, 19, 27, 0.18);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    background: rgba(66, 68, 83, 0.95);
-    backdrop-filter: blur(10px);
+    background: linear-gradient(180deg, var(--color-surface), rgba(255,255,255,0.02));
+    backdrop-filter: blur(6px);
+    border: 1px solid var(--color-border);
 }
 
 .card-body {
-    background: rgba(66, 68, 83, 0.98);
+    background: transparent;
     border-radius: 0 0 var(--border-radius) var(--border-radius);
 }
 
@@ -1001,11 +1004,11 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Enhanced Section Backgrounds */
 .hero-section {
-    background: linear-gradient(135deg, rgba(30, 136, 229, 0.1) 0%, rgba(126, 87, 194, 0.08) 50%, rgba(251, 140, 0, 0.05) 100%);
+    background: linear-gradient(135deg, rgba(0,163,255,0.06) 0%, rgba(7,59,58,0.06) 60%);
     border-radius: var(--border-radius);
     padding: 3rem 2rem;
     margin-bottom: 2rem;
-    box-shadow: 0 8px 32px rgba(30, 136, 229, 0.1);
+    box-shadow: 0 10px 40px rgba(3, 19, 27, 0.2);
 }
 
 .analysis-options-section {
@@ -1094,4 +1097,34 @@ h1, h2, h3, h4, h5, h6 {
     background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(245, 247, 250, 0.95) 100%);
     border-color: var(--color-primary);
     box-shadow: 0 16px 48px rgba(30, 136, 229, 0.2);
+}
+
+/* Layout helpers */
+.main-content {
+    padding-top: 2.25rem;
+    padding-bottom: 2.25rem;
+}
+
+/* Footer improvements */
+footer.bg-light {
+    background: linear-gradient(180deg, rgba(66,68,83,0.95), rgba(47,49,62,0.95));
+    color: var(--color-text) !important;
+    padding: 1rem 0;
+    border-top: 1px solid rgba(79,195,247,0.06);
+}
+
+footer .text-muted {
+    color: rgba(255,255,255,0.75) !important;
+    font-size: 0.95rem;
+}
+
+/* Accessibility: focus states */
+.btn:focus, .nav-link:focus, .form-control:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.25rem rgba(79,195,247,0.18) !important;
+}
+
+/* Improve tappable sizes on mobile */
+.nav-link {
+    padding: 0.5rem 0.75rem;
 }

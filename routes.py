@@ -13,7 +13,8 @@ import json
 
 AUDIO_EXTENSIONS = {'mp3', 'wav', 'm4a', 'ogg', 'flac', 'webm'}
 PDF_EXTENSIONS = {'pdf'}
-ALLOWED_EXTENSIONS = AUDIO_EXTENSIONS | PDF_EXTENSIONS
+VIDEO_EXTENSIONS = {'mp4'}
+ALLOWED_EXTENSIONS = AUDIO_EXTENSIONS | PDF_EXTENSIONS | VIDEO_EXTENSIONS
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -23,6 +24,25 @@ def is_audio_file(filename):
 
 def is_pdf_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in PDF_EXTENSIONS
+
+def is_video_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in VIDEO_EXTENSIONS
+
+
+def get_media_duration(path):
+    """Try to get media duration in seconds using ffprobe. Return float seconds or None."""
+    try:
+        import subprocess, shlex
+        cmd = f"ffprobe -v error -select_streams v:0 -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 {shlex.quote(path)}"
+        result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+        if result.returncode == 0 and result.stdout:
+            try:
+                return float(result.stdout.strip())
+            except:
+                return None
+    except Exception as e:
+        logging.debug(f"ffprobe not available or failed: {e}")
+    return None
 
 @app.route('/')
 def index():
@@ -39,6 +59,13 @@ def upload_audio_page():
     """Audio upload page"""
     recent_analyses = ClassroomAnalysis.query.filter_by(analysis_type='audio').order_by(ClassroomAnalysis.upload_timestamp.desc()).limit(5).all()
     return render_template('audio_upload.html', recent_analyses=recent_analyses)
+
+
+@app.route('/upload-video')
+def upload_video_page():
+    """Video upload page"""
+    recent_analyses = ClassroomAnalysis.query.filter_by(analysis_type='video').order_by(ClassroomAnalysis.upload_timestamp.desc()).limit(5).all()
+    return render_template('video_upload.html', recent_analyses=recent_analyses)
 
 @app.route('/upload-pdf')
 def upload_pdf_page():
@@ -60,6 +87,9 @@ def upload_file():
         elif 'pdf_file' in request.files and request.files['pdf_file'].filename:
             file = request.files['pdf_file']
             analysis_type = 'pdf'
+        elif 'video_file' in request.files and request.files['video_file'].filename:
+            file = request.files['video_file']
+            analysis_type = 'video'
         
         if not file or not analysis_type:
             flash('No file selected', 'error')
@@ -70,9 +100,11 @@ def upload_file():
         
         if file.filename is None or not allowed_file(file.filename):
             if analysis_type == 'audio':
-                flash('Invalid file format. Please upload MP3, WAV, M4A, OGG, or FLAC files.', 'error')
+                flash('Formato inválido. Sube MP3, WAV, M4A, OGG o FLAC.', 'error')
+            elif analysis_type == 'video':
+                flash('Formato inválido. Sube archivos MP4.', 'error')
             else:
-                flash('Invalid file format. Please upload PDF files.', 'error')
+                flash('Formato inválido. Sube archivos PDF.', 'error')
             return redirect(url_for('index'))
         
         # Save the file
@@ -85,6 +117,17 @@ def upload_file():
         filename = f"{timestamp}_{filename}"
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(filepath)
+        # If video, validate duration (max 15 minutes) and optionally extract audio later
+        if analysis_type == 'video':
+            duration = get_media_duration(filepath)
+            max_seconds = 15 * 60
+            if duration is not None and duration > max_seconds:
+                try:
+                    os.remove(filepath)
+                except:
+                    pass
+                flash('El video excede la duración máxima permitida de 15 minutos.', 'error')
+                return redirect(url_for('upload_video_page'))
         
         # Get educational context from form
         subject = request.form.get('subject', '').strip()
@@ -117,9 +160,11 @@ def upload_file():
         db.session.commit()
         
         if analysis_type == 'audio':
-            flash('Audio uploaded successfully! Speech analysis is starting...', 'success')
+            flash('Audio subido correctamente. Iniciando análisis de voz...', 'success')
+        elif analysis_type == 'video':
+            flash('Video subido correctamente. Iniciando extracción y análisis de audio...', 'success')
         else:
-            flash('PDF uploaded successfully! Lesson plan analysis is starting...', 'success')
+            flash('PDF subido correctamente. Iniciando análisis pedagógico...', 'success')
         
         return redirect(url_for('analyze', analysis_id=analysis.id))
         
@@ -138,6 +183,8 @@ def analyze(analysis_id):
         try:
             if analysis.is_audio_analysis():
                 process_audio_analysis(analysis)
+            elif analysis.is_video_analysis():
+                process_video_analysis(analysis)
             elif analysis.is_pdf_analysis():
                 process_pdf_analysis(analysis)
         except Exception as e:
@@ -151,6 +198,86 @@ def analyze(analysis_id):
         return render_template('lesson_analysis.html', analysis=analysis)
     else:
         return render_template('analysis.html', analysis=analysis)
+
+
+def extract_audio_from_video(video_path, out_audio_path):
+    """Extract a mono 16k WAV audio from video using ffmpeg. Returns True on success."""
+    try:
+        import subprocess, shlex
+        cmd = f"ffmpeg -y -i {shlex.quote(video_path)} -ac 1 -ar 16000 -vn {shlex.quote(out_audio_path)}"
+        result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+        return result.returncode == 0
+    except Exception as e:
+        logging.error(f"Error extracting audio from video: {e}")
+        return False
+
+
+def process_video_analysis(analysis):
+    """Process video file by extracting audio, transcribing and analyzing prosody"""
+    try:
+        analysis.status = 'processing'
+        db.session.commit()
+
+        video_path = os.path.join(app.config['UPLOAD_FOLDER'], analysis.filename)
+
+        # Prepare temp audio path
+        base, _ = os.path.splitext(analysis.filename)
+        audio_filename = f"{base}_extracted.wav"
+        audio_path = os.path.join(app.config['UPLOAD_FOLDER'], audio_filename)
+
+        logging.info(f"Extracting audio from video {analysis.filename}")
+
+        extracted = extract_audio_from_video(video_path, audio_path)
+        if not extracted:
+            raise Exception('No se pudo extraer el audio del video. Asegúrese de que ffmpeg esté instalado.')
+
+        # Use existing audio processing flow
+        audio_processor = AudioProcessor()
+        ric_agent = RICAgent()
+
+        logging.info(f"Starting transcription for extracted audio {audio_filename}")
+        transcription_result = audio_processor.transcribe_audio(audio_path)
+        analysis.transcription_text = transcription_result['text']
+        analysis.set_transcription_data(transcription_result)
+        db.session.commit()
+
+        logging.info(f"Starting prosodic analysis for extracted audio {audio_filename}")
+        prosody_result = audio_processor.analyze_prosody(audio_path)
+        analysis.set_prosody_data(prosody_result)
+        db.session.commit()
+
+        logging.info(f"Starting RIC feedback generation for video {analysis.filename}")
+        educational_context = analysis.get_educational_context()
+        combined_data = {
+            'transcription': transcription_result,
+            'prosody': prosody_result,
+            'educational_context': educational_context,
+            'timestamp': datetime.utcnow().isoformat()
+        }
+
+        feedback = ric_agent.generate_educational_feedback(combined_data)
+        analysis.set_ric_feedback(feedback)
+
+        # Mark as completed
+        analysis.status = 'completed'
+        analysis.analysis_timestamp = datetime.utcnow()
+        db.session.commit()
+
+        # cleanup extracted audio
+        try:
+            if os.path.exists(audio_path):
+                os.remove(audio_path)
+        except:
+            pass
+
+        logging.info(f"Video analysis completed for {analysis.filename}")
+
+    except Exception as e:
+        logging.error(f"Video processing error for {analysis.filename}: {str(e)}")
+        analysis.status = 'error'
+        analysis.error_message = str(e)
+        db.session.commit()
+        raise e
 
 @app.route('/api/analysis/<int:analysis_id>/status')
 def get_analysis_status(analysis_id):
@@ -175,7 +302,7 @@ def get_analysis_results(analysis_id):
         'feedback': analysis.get_ric_feedback()
     }
     
-    if analysis.is_audio_analysis():
+    if analysis.is_audio_analysis() or analysis.is_video_analysis():
         results.update({
             'transcription': analysis.get_transcription_data(),
             'prosody': analysis.get_prosody_data()
@@ -207,6 +334,7 @@ def get_progress_data():
         total_analyses = ClassroomAnalysis.query.count()
         audio_analyses = ClassroomAnalysis.query.filter_by(analysis_type='audio').count()
         pdf_analyses = ClassroomAnalysis.query.filter_by(analysis_type='pdf').count()
+        video_analyses = ClassroomAnalysis.query.filter_by(analysis_type='video').count()
         
         # Status distribution
         completed_analyses = ClassroomAnalysis.query.filter_by(status='completed').count()
@@ -298,6 +426,7 @@ def get_progress_data():
                 'total_analyses': total_analyses,
                 'audio_analyses': audio_analyses,
                 'pdf_analyses': pdf_analyses,
+                'video_analyses': video_analyses,
                 'completed_analyses': completed_analyses,
                 'processing_analyses': processing_analyses,
                 'error_analyses': error_analyses,
