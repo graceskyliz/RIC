@@ -1,4 +1,6 @@
 .env
 # Entornos
-.env
 .env.*
+.venv/
+.venv/
+venv/
