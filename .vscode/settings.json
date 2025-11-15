@@ -1,0 +1,15 @@
+{
+    "sqltools.connections": [
+        {
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5555,
+            "driver": "PostgreSQL",
+            "name": "ric-local",
+            "group": "local",
+            "database": "ric",
+            "username": "postgres"
+        }
+    ]
+}
